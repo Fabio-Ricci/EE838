@@ -24,7 +24,11 @@ def preprocess_data():
         audio = np.array(audio)
         # We want to ensure that every song we look at has the same
         # number of samples!
+        print(len(audio[:, 0]))
+        audio = audio[0:5292000]
         if len(audio[:, 0]) != 5292000:
+            print(len(audio[:, 0]))
+            print("wrong sample")
             continue
         wav_arr_ch1.append(rfft(audio[:, 0]))
         wav_arr_ch2.append(rfft(audio[:, 1]))
