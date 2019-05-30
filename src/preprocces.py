@@ -1,22 +1,22 @@
 from scipy.fftpack import rfft, irfft
-from tensorflow.contrib.framework.python.ops import audio_ops
-'''
-curr_batch - The current batch of the training data we are looking at.
-songs_per_batch - How songs we want to load in per batch
-sess - Our TensorFlow session object
-'''
+from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav
+import tensorflow as tf
+import numpy as np
+from glob import iglob
 
 
-def get_next_batch(curr_batch, songs_per_batch, sess):
+DATA_FILES_WAV = 'songs_wav'
+
+def preprocess_data():
+    file_arr = iglob(DATA_FILES_WAV + '/*.wav')
+    sess = tf.Session()
+
     wav_arr_ch1 = []
     wav_arr_ch2 = []
-    if (curr_batch) >= (len(file_arr)):
-        curr_batch = 0
-    start_position = curr_batch * songs_per_batch
-    end_position = start_position + songs_per_batch
-    for idx in range(start_position, end_position):
-        audio_binary = tf.read_file(file_arr[idx])
-        wav_decoder = audio_ops.decode_wav(
+
+    for f in file_arr:
+        audio_binary = tf.read_file(f)
+        wav_decoder = decode_wav(
             audio_binary, desired_channels=2)
         sample_rate, audio = sess.run(
             [wav_decoder.sample_rate,
@@ -28,6 +28,8 @@ def get_next_batch(curr_batch, songs_per_batch, sess):
             continue
         wav_arr_ch1.append(rfft(audio[:, 0]))
         wav_arr_ch2.append(rfft(audio[:, 1]))
-    print("Returning File: " + file_arr[idx])
+        print("Returning File: " + f)
 
     return wav_arr_ch1, wav_arr_ch2, sample_rate
+
+preprocess_data()
