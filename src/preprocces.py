@@ -1,5 +1,6 @@
 from scipy.fftpack import rfft, irfft
 from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav
+import math
 import tensorflow as tf
 import numpy as np
 from glob import iglob
@@ -24,14 +25,15 @@ def preprocess_data():
         audio = np.array(audio)
         # We want to ensure that every song we look at has the same
         # number of samples!
-        print(len(audio[:, 0]))
-        audio = audio[0:5292000]
-        if len(audio[:, 0]) != 5292000:
-            print(len(audio[:, 0]))
-            print("wrong sample")
-            continue
-        wav_arr_ch1.append(rfft(audio[:, 0]))
-        wav_arr_ch2.append(rfft(audio[:, 1]))
+        section_size = 529200
+        audios = [audio[i * section_size:(i + 1) * section_size] for i in range((len(audio) + section_size - 1) // section_size )] 
+        for a in audios:
+            if len(a[:, 0]) != section_size:
+                print(len(a[:, 0]))
+                print("wrong sample")
+                continue
+            wav_arr_ch1.append(rfft(a[:, 0]))
+            wav_arr_ch2.append(rfft(a[:, 1]))
         print("Returning File: " + f)
 
     return wav_arr_ch1, wav_arr_ch2, sample_rate
