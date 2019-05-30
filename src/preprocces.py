@@ -35,7 +35,8 @@ def preprocess_data():
             wav_arr_ch1.append(rfft(a[:, 0]))
             wav_arr_ch2.append(rfft(a[:, 1]))
         print("Returning File: " + f)
-
+        print("sample rate", sample_rate)
+    print("Number of returned chuncks", len(wav_arr_ch1))
     return wav_arr_ch1, wav_arr_ch2, sample_rate
 
 preprocess_data()
