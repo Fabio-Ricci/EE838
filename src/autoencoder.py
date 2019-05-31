@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
 wav_arr_ch1 = np.array(wav_arr_ch1)
@@ -35,15 +36,16 @@ decoded = Dense(12348, activation='relu')(decoded)
 
 
 autoencoder = Model(input_img, decoded)
-autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
 
-
+# checkpoint
+filepath="weights-improvement-{epoch:02d}.hdf5"
+checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max')
+callbacks_list = [checkpoint]
+# Fit the model
 autoencoder.fit(data, data,
+                validation_split=0.33,
+                batch_size=100,
                 epochs=50,
-                batch_size=256,
                 shuffle=True,
-                validation_data=(data, data))
-
-
-encoded_imgs = encoder.predict(x_test)
-decoded_imgs = decoder.predict(encoded_imgs)
+                callbacks=callbacks_list)
