@@ -2,3 +2,4 @@ songs
 songs_wav
 .DS_Store
 ENV
+__pycache__

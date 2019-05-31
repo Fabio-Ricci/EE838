@@ -9,6 +9,7 @@ from glob import iglob
 DATA_FILES_WAV = 'songs_wav'
 
 def preprocess_data():
+    i = 0
     file_arr = iglob(DATA_FILES_WAV + '/*.wav')
     sess = tf.Session()
 
@@ -16,6 +17,9 @@ def preprocess_data():
     wav_arr_ch2 = []
 
     for f in file_arr:
+        if i == 2:
+            break
+        i += 1
         audio_binary = tf.read_file(f)
         wav_decoder = decode_wav(
             audio_binary, desired_channels=2)
@@ -25,7 +29,7 @@ def preprocess_data():
         audio = np.array(audio)
         # We want to ensure that every song we look at has the same
         # number of samples!
-        section_size = 529200
+        section_size = 12348 // 2
         audios = [audio[i * section_size:(i + 1) * section_size] for i in range((len(audio) + section_size - 1) // section_size )] 
         for a in audios:
             if len(a[:, 0]) != section_size:
@@ -39,4 +43,3 @@ def preprocess_data():
     print("Number of returned chuncks", len(wav_arr_ch1))
     return wav_arr_ch1, wav_arr_ch2, sample_rate
 
-preprocess_data()
