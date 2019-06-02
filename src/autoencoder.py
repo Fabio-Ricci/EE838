@@ -4,6 +4,59 @@ import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import ModelCheckpoint
+import os
+import datetime
+import matplotlib.pyplot as plt
+
+
+def compile_model(model):
+    return model.compile(optimizer='adadelta', loss='binary_crossentropy')
+
+def load_model(name):
+    # load json and create model
+    json_file = open(name + '.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    loaded_model = model_from_json(loaded_model_json)
+    # load weights into new model
+    loaded_model.load_weights(name + ".h5")
+    loaded_model = compile_model(loaded_model)
+    return loaded_model
+
+def save_model(model, name):
+    # serialize model to JSON
+    model_json = model.to_json()
+    if os.path.isfile(name+'.json'):
+        name = name+'-'+str(datetime.datetime.now())
+    if not os.path.exists('/'.join(name.split('/')[:-1])):
+        os.makedirs('/'.join(name.split('/')[:-1]))
+    with open(name + ".json", "w") as json_file:
+        json_file.write(model_json)
+    # serialize weights to HDF5
+    model.save_weights(name + ".h5")
+
+def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-keypoint-detection.html
+    # accuracy
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    # loss
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    # plt.show()
+    plt.tight_layout()
+    if name == '':
+        name = 'graphs/'+str(datetime.datetime.now())
+    plt.savefig(name+'-training-info.png')
 
 wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
 wav_arr_ch1 = np.array(wav_arr_ch1)
@@ -36,16 +89,24 @@ decoded = Dense(12348, activation='relu')(decoded)
 
 
 autoencoder = Model(input_img, decoded)
-autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+autoencoder = compile_model(autoencoder)
 
 # checkpoint
-filepath="weights-improvement-{epoch:02d}.hdf5"
-checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max')
-callbacks_list = [checkpoint]
+# filepath="weights-improvement-{epoch:02d}.hdf5"
+# checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
+callbacks_list = []#[checkpoint]
+
 # Fit the model
-autoencoder.fit(data, data,
+history = autoencoder.fit(data, data,
                 validation_split=0.33,
                 batch_size=100,
-                epochs=50,
+                epochs=1000,
                 shuffle=True,
                 callbacks=callbacks_list)
+
+score = autoencoder.evaluate(data, data, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+
+save_model(autoencoder,'models/model-v1')
+create_graphs(history)
