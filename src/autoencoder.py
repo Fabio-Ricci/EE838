@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 
 
 def compile_model(model):
-    return model.compile(optimizer='adadelta', loss='binary_crossentropy')
+    model.compile(optimizer='adadelta', loss='binary_crossentropy')
+    return model
 
 def load_model(name):
     # load json and create model
@@ -108,5 +109,5 @@ score = autoencoder.evaluate(data, data, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
-save_model(autoencoder,'models/model-v1')
+save_model(autoencoder,'models/model-v1-1000eps')
 create_graphs(history)
