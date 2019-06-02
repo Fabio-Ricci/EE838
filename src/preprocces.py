@@ -41,5 +41,11 @@ def preprocess_data():
         print("Returning File: " + f)
         print("sample rate", sample_rate)
     print("Number of returned chuncks", len(wav_arr_ch1))
+
+    if len(wav_arr_ch1) <= 0:
+        print('No data')
+        print('Quitting')
+        exit()
+
     return wav_arr_ch1, wav_arr_ch2, sample_rate
 
