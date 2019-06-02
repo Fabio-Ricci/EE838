@@ -2,7 +2,7 @@ from preprocces import preprocess_data
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import Model, model_from_json
 from tensorflow.keras.callbacks import ModelCheckpoint
 import os
 import datetime
@@ -59,13 +59,13 @@ def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-ke
         name = 'graphs/'+str(datetime.datetime.now())
     plt.savefig(name+'-training-info.png')
 
+
+
 wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
 wav_arr_ch1 = np.array(wav_arr_ch1)
 wav_arr_ch2 = np.array(wav_arr_ch2)
 
 data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-
-
 print(len(data[0]))
 
 # inputs = 12348
@@ -78,36 +78,41 @@ print(len(data[0]))
 
 # this is the size of our encoded representations
 encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
+load = False
 
-input_img = Input(shape=(12348,))
-encoded = Dense(8400, activation='relu')(input_img)
-encoded = Dense(3440, activation='relu')(encoded)
-encoded = Dense(2800, activation='relu')(encoded)
+if load:
+    autoencoder = load_model('models/model-v1-100eps')
+else:
+    input_img = Input(shape=(12348,))
+    encoded = Dense(8400, activation='relu')(input_img)
+    encoded = Dense(3440, activation='relu')(encoded)
+    encoded = Dense(2800, activation='relu')(encoded)
 
-decoded = Dense(3440, activation='relu')(encoded)
-decoded = Dense(8400, activation='relu')(decoded)
-decoded = Dense(12348, activation='relu')(decoded)
+    decoded = Dense(3440, activation='relu')(encoded)
+    decoded = Dense(8400, activation='relu')(decoded)
+    decoded = Dense(12348, activation='relu')(decoded)
 
-
-autoencoder = Model(input_img, decoded)
-autoencoder = compile_model(autoencoder)
+    autoencoder = Model(input_img, decoded)
+    autoencoder = compile_model(autoencoder)
 
 # checkpoint
 # filepath="weights-improvement-{epoch:02d}.hdf5"
 # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
 callbacks_list = []#[checkpoint]
 
-# Fit the model
-history = autoencoder.fit(data, data,
-                validation_split=0.33,
-                batch_size=100,
-                epochs=1000,
-                shuffle=True,
-                callbacks=callbacks_list)
 
-score = autoencoder.evaluate(data, data, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+for i in range(10): # 100 epochs = 0.56h = 34 min
+    # Fit the model
+    history = autoencoder.fit(data, data,
+                    validation_split=0.33,
+                    batch_size=512,
+                    epochs=100,
+                    shuffle=True,
+                    callbacks=callbacks_list)
 
-save_model(autoencoder,'models/model-v1-1000eps')
-create_graphs(history)
+    score = autoencoder.evaluate(data, data, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+
+    save_model(autoencoder,'models/model-v1-'+str(i*100)+'eps')
+    create_graphs(history,'graphs/model-v1-'+str(i*100)+'eps')
