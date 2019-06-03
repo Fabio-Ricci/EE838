@@ -3,3 +3,5 @@ songs_wav
 .DS_Store
 ENV
 __pycache__
+src/graphs
+src/models

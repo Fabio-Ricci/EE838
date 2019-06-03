@@ -38,7 +38,6 @@ def save_model(model, name):
 
 def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-keypoint-detection.html
     # loss
-    plt.subplot(1, 2, 2)
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
@@ -95,17 +94,18 @@ else:
 callbacks_list = []#[checkpoint]
 
 
-for i in range(1): # 100 epochs = 0.56h = 34 min
+for i in range(2): # 100 epochs = 0.56h = 34 min
+    epochs = 50
     # Fit the model
     history = autoencoder.fit(data, data,
                     validation_split=0.33,
                     batch_size=512,
-                    epochs=3,
+                    epochs=epochs,
                     shuffle=True,
                     callbacks=callbacks_list)
 
     score = autoencoder.evaluate(data, data, verbose=0)
     print('Test loss:', score)
 
-    save_model(autoencoder,'models/model-v1-'+str(i*100)+'eps')
-    create_graphs(history,'graphs/model-v1-'+str(i*100)+'eps')
+    save_model(autoencoder,'models/model-v1-'+str((i+1)*epochs)+'eps')
+    create_graphs(history,'graphs/model-v1-'+str((i+1)*epochs)+'eps')
