@@ -37,14 +37,6 @@ def save_model(model, name):
     model.save_weights(name + ".h5")
 
 def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-keypoint-detection.html
-    # accuracy
-    plt.subplot(1, 2, 1)
-    plt.plot(history.history['acc'])
-    plt.plot(history.history['val_acc'])
-    plt.title('model accuracy')
-    plt.ylabel('accuracy')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
     # loss
     plt.subplot(1, 2, 2)
     plt.plot(history.history['loss'])
@@ -57,6 +49,8 @@ def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-ke
     plt.tight_layout()
     if name == '':
         name = 'graphs/'+str(datetime.datetime.now())
+    if not os.path.exists('/'.join(name.split('/')[:-1])):
+        os.makedirs('/'.join(name.split('/')[:-1]))
     plt.savefig(name+'-training-info.png')
 
 
@@ -101,18 +95,17 @@ else:
 callbacks_list = []#[checkpoint]
 
 
-for i in range(10): # 100 epochs = 0.56h = 34 min
+for i in range(1): # 100 epochs = 0.56h = 34 min
     # Fit the model
     history = autoencoder.fit(data, data,
                     validation_split=0.33,
                     batch_size=512,
-                    epochs=100,
+                    epochs=3,
                     shuffle=True,
                     callbacks=callbacks_list)
 
     score = autoencoder.evaluate(data, data, verbose=0)
-    print('Test loss:', score[0])
-    print('Test accuracy:', score[1])
+    print('Test loss:', score)
 
     save_model(autoencoder,'models/model-v1-'+str(i*100)+'eps')
     create_graphs(history,'graphs/model-v1-'+str(i*100)+'eps')
