@@ -1,5 +1,7 @@
 songs
 songs_wav
+.vscode
+songs_converted
 .DS_Store
 ENV
 __pycache__
