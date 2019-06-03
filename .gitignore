@@ -6,3 +6,6 @@ ENV
 __pycache__
 src/graphs
 src/models
+
+test/
+test_reconstructed/
