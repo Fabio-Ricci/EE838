@@ -1,3 +1,7 @@
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 from preprocces import preprocess_data
 import numpy as np
 import tensorflow as tf
@@ -10,7 +14,7 @@ import matplotlib.pyplot as plt
 
 
 def compile_model(model):
-    model.compile(optimizer='adadelta', loss='binary_crossentropy')
+    model.compile(optimizer='adam', loss='mse')
     return model
 
 def load_model(name):
