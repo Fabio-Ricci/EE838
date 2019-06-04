@@ -10,22 +10,7 @@ from glob import iglob
 from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav, encode_wav
 from tensorflow.contrib import ffmpeg
 import numpy as np
-
-def compile_model(model):
-    model.compile(optimizer='adadelta', loss='binary_crossentropy')
-    return model
-
-def load_model(name):
-    # load json and create model
-    json_file = open(name + '.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = model_from_json(loaded_model_json)
-    # load weights into new model
-    loaded_model.load_weights(name + ".h5")
-    loaded_model = compile_model(loaded_model)
-    return loaded_model
-
+from autoencoder import compile_model, load_model
 
 autoencoder = load_model('models/model-v1-1150eps')
 

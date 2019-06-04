@@ -79,7 +79,7 @@ encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the inp
 load = False
 
 if load:
-    autoencoder = load_model('/content/gdrive/My Drive/models/v2/model-300eps')
+    autoencoder = load_model('/content/gdrive/My Drive/models/v3/model-300eps')
 else:
     input_img = Input(shape=(12348,))
     encoded = Dense(8400, activation='relu')(input_img)
@@ -109,6 +109,6 @@ for i in range(100): # 100 epochs = 0.56h = 34 min
     score = autoencoder.evaluate(data, data, verbose=0)
     print('Test loss:', score)
 
-    name = '/v2/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+    name = '/v3/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
     save_model(autoencoder,'/content/gdrive/My Drive/models'+name)
     create_graphs(history,'/content/gdrive/My Drive/graphs'+name)
