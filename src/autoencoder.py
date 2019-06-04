@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 
 def compile_model(model):
-    model.compile(optimizer='adam', loss='mse')
+    model.compile(optimizer='adam', loss='binary_crossentropy')
     return model
 
 def load_model(name):

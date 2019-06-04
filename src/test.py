@@ -36,8 +36,8 @@ section_size = 12348 // 2
 
 
 for f in file_arr:
-    ch1_song = np.array([]).reshape((1,0)).astype(float)
-    ch2_song = np.array([]).reshape((1,0)).astype(float)
+    ch1_song = np.array([]).astype(float)
+    ch2_song = np.array([]).astype(float)
 
     audio_binary = tf.read_file(f)
     wav_decoder = decode_wav(
@@ -52,8 +52,8 @@ for f in file_arr:
                                           for i in range((len(audio) + section_size - 1) // section_size)]
     i = 0
     for a in audios:
-        # if i == 20:
-        #     break
+        if i == 1000:
+            break
         i += 1
         if len(a[:, 0]) != section_size:
             print(len(a[:, 0]))
@@ -64,22 +64,20 @@ for f in file_arr:
 
 
         predicted = autoencoder.predict(merged)
+        # predicted = merged
         splitted = np.hsplit(predicted[0], 2)
-        channel1 = splitted[0]
-        channel2 = splitted[1]
+        channel1 = irfft(splitted[0])
+        channel2 = irfft(splitted[1])
         print(ch1_song.shape)
         print(ch2_song.shape)
-        ch1_song = np.concatenate((ch1_song, channel1.reshape((1, section_size))), axis=1)
-        ch2_song = np.concatenate((ch2_song, channel2.reshape((1, section_size))), axis=1)
-    
-    audio_arr_ch1 = irfft(np.hstack(np.hstack(ch1_song)))
-    audio_arr_ch2 = irfft(np.hstack(np.hstack(ch2_song)))
+        ch1_song = np.concatenate((ch1_song, channel1))
+        ch2_song = np.concatenate((ch2_song, channel2))
 
-    audio_arr = np.hstack(np.array((audio_arr_ch1, audio_arr_ch2)).T)
+    audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)
     cols = 2
     rows = math.floor(len(audio_arr)/2)
     audio_arr = audio_arr.reshape(rows, cols)
-    print(audio_arr)
+   
 
 
     wav_encoder = ffmpeg.encode_audio(
