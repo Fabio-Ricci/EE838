@@ -76,7 +76,7 @@ print(len(data[0]))
 
 # this is the size of our encoded representations
 encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
-load = False
+load = True
 
 if load:
     autoencoder = load_model('/content/gdrive/My Drive/models/v2/model-300eps')
