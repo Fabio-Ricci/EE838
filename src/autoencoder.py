@@ -104,7 +104,7 @@ for i in range(100): # 100 epochs = 0.56h = 34 min
     epochs = 50
     # Fit the model
     history = autoencoder.fit(data, data,
-                    validation_split=0.33,
+                    validation_split=0.20,
                     batch_size=512,
                     epochs=epochs,
                     shuffle=True,
