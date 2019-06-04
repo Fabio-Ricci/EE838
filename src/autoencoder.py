@@ -58,57 +58,58 @@ def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-ke
     plt.savefig(name+'-training-info.png')
 
 
+if __name__ == "__main__":
 
-wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
-wav_arr_ch1 = np.array(wav_arr_ch1)
-wav_arr_ch2 = np.array(wav_arr_ch2)
+    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
+    wav_arr_ch1 = np.array(wav_arr_ch1)
+    wav_arr_ch2 = np.array(wav_arr_ch2)
 
-data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-print(len(data[0]))
+    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+    print(len(data[0]))
 
-# inputs = 12348
-# hidden_1_size = 8400
-# hidden_2_size = 3440
-# hidden_3_size = 2800
-# batch_size = 50
-# lr = 0.0001
-# l2 = 0.0001
+    # inputs = 12348
+    # hidden_1_size = 8400
+    # hidden_2_size = 3440
+    # hidden_3_size = 2800
+    # batch_size = 50
+    # lr = 0.0001
+    # l2 = 0.0001
 
-# this is the size of our encoded representations
-encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
-load = False
+    # this is the size of our encoded representations
+    encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
+    load = False
 
-if load:
-    autoencoder = load_model('/content/gdrive/My Drive/models/v3/model-300eps')
-else:
-    input_img = Input(shape=(12348,))
-    encoded = Dense(8400, activation='relu')(input_img)
+    if load:
+        autoencoder = load_model('/content/gdrive/My Drive/models/v3/model-300eps')
+    else:
+        input_img = Input(shape=(12348,))
+        encoded = Dense(8400, activation='relu')(input_img)
 
-    decoded = Dense(12348, activation='relu')(encoded)
+        decoded = Dense(12348, activation='relu')(encoded)
 
-    autoencoder = Model(input_img, decoded)
-    autoencoder = compile_model(autoencoder)
+        autoencoder = Model(input_img, decoded)
+        autoencoder = compile_model(autoencoder)
 
-# checkpoint
-# filepath="weights-improvement-{epoch:02d}.hdf5"
-# checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
-callbacks_list = []#[checkpoint]
+    # checkpoint
+    # filepath="weights-improvement-{epoch:02d}.hdf5"
+    # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
+    callbacks_list = []#[checkpoint]
 
 
-for i in range(100): # 100 epochs = 0.56h = 34 min
-    initial_epoch = 0
-    epochs = 50
-    # Fit the model
-    history = autoencoder.fit(data, data,
-                    validation_split=0.20,
-                    batch_size=512,
-                    epochs=epochs,
-                    shuffle=True,
-                    callbacks=callbacks_list)
+    for i in range(100): # 100 epochs = 0.56h = 34 min
+        initial_epoch = 0
+        epochs = 50
+        # Fit the model
+        history = autoencoder.fit(data, data,
+                        validation_split=0.20,
+                        batch_size=512,
+                        epochs=epochs,
+                        shuffle=True,
+                        callbacks=callbacks_list)
 
-    score = autoencoder.evaluate(data, data, verbose=0)
-    print('Test loss:', score)
+        score = autoencoder.evaluate(data, data, verbose=0)
+        print('Test loss:', score)
 
-    name = '/v3/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
-    save_model(autoencoder,'/content/gdrive/My Drive/models'+name)
-    create_graphs(history,'/content/gdrive/My Drive/graphs'+name)
+        name = '/v3/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        save_model(autoencoder,'/content/gdrive/My Drive/models'+name)
+        create_graphs(history,'/content/gdrive/My Drive/graphs'+name)
