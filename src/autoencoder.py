@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 
 def compile_model(model):
-    model.compile(optimizer='adam', loss='mse')
+    model.compile(optimizer='adam', loss='binary_crossentropy')
     return model
 
 def load_model(name):
@@ -98,7 +98,7 @@ else:
 callbacks_list = []#[checkpoint]
 
 
-for i in range(2): # 100 epochs = 0.56h = 34 min
+for i in range(10): # 100 epochs = 0.56h = 34 min
     epochs = 50
     # Fit the model
     history = autoencoder.fit(data, data,
