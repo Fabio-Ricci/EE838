@@ -76,7 +76,7 @@ print(len(data[0]))
 
 # this is the size of our encoded representations
 encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
-load = True
+load = False
 
 if load:
     autoencoder = load_model('/content/gdrive/My Drive/models/v2/model-300eps')
@@ -100,7 +100,7 @@ callbacks_list = []#[checkpoint]
 
 
 for i in range(100): # 100 epochs = 0.56h = 34 min
-    initial_epoch = 300
+    initial_epoch = 0
     epochs = 50
     # Fit the model
     history = autoencoder.fit(data, data,
