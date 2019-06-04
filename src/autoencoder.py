@@ -42,6 +42,7 @@ def save_model(model, name):
 
 def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-keypoint-detection.html
     # loss
+    plt.figure()
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
@@ -78,7 +79,7 @@ encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the inp
 load = False
 
 if load:
-    autoencoder = load_model('models/model-v1-100eps')
+    autoencoder = load_model('models/v2/model-v1-50eps')
 else:
     input_img = Input(shape=(12348,))
     encoded = Dense(8400, activation='relu')(input_img)
@@ -99,6 +100,7 @@ callbacks_list = []#[checkpoint]
 
 
 for i in range(2): # 100 epochs = 0.56h = 34 min
+    initial_epoch = 0
     epochs = 50
     # Fit the model
     history = autoencoder.fit(data, data,
@@ -111,5 +113,6 @@ for i in range(2): # 100 epochs = 0.56h = 34 min
     score = autoencoder.evaluate(data, data, verbose=0)
     print('Test loss:', score)
 
-    save_model(autoencoder,'models/model-v1-'+str((i+1)*epochs)+'eps')
-    create_graphs(history,'graphs/model-v1-'+str((i+1)*epochs)+'eps')
+    name = '/v2/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+    save_model(autoencoder,'models'+name)
+    create_graphs(history,'graphs'+name)
