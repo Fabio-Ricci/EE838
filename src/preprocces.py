@@ -10,7 +10,8 @@ DATA_FILES_WAV = 'songs_wav'
 
 def preprocess_data():
     i = 0
-    file_arr = iglob(DATA_FILES_WAV + '/*.wav')
+    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
+    np.random.shuffle(file_arr)
     sess = tf.Session()
 
     wav_arr_ch1 = []
