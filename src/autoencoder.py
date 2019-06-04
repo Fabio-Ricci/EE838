@@ -83,12 +83,8 @@ if load:
 else:
     input_img = Input(shape=(12348,))
     encoded = Dense(8400, activation='relu')(input_img)
-    encoded = Dense(3440, activation='relu')(encoded)
-    encoded = Dense(2800, activation='relu')(encoded)
 
-    decoded = Dense(3440, activation='relu')(encoded)
-    decoded = Dense(8400, activation='relu')(decoded)
-    decoded = Dense(12348, activation='relu')(decoded)
+    decoded = Dense(12348, activation='relu')(encoded)
 
     autoencoder = Model(input_img, decoded)
     autoencoder = compile_model(autoencoder)
