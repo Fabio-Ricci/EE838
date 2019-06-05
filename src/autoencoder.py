@@ -79,11 +79,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = 0
+    load = True
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v5/model-1150eps')
+            '/content/gdrive/My Drive/models/v5/model-200eps')
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu',
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     callbacks_list = []  # [checkpoint]
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
-        initial_epoch = 0
+        initial_epoch = 200
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
