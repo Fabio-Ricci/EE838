@@ -84,6 +84,7 @@ if __name__ == "__main__":
     if load:
         autoencoder = load_model(
             '/content/gdrive/My Drive/models/v5/model-200eps')
+        print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu',
