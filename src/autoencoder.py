@@ -59,7 +59,6 @@ def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-ke
 
 
 if __name__ == "__main__":
-
     wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
     wav_arr_ch1 = np.array(wav_arr_ch1)
     wav_arr_ch2 = np.array(wav_arr_ch2)
