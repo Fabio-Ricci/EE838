@@ -1,21 +1,20 @@
-import os
-
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
-
-from preprocces import preprocess_data
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.callbacks import ModelCheckpoint
-import os
-import datetime
 import matplotlib.pyplot as plt
+import datetime
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.models import Model, model_from_json
+from tensorflow.keras.layers import Input, Dense
+import tensorflow as tf
+import numpy as np
+from preprocces import preprocess_data
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def compile_model(model):
     model.compile(optimizer='adam', loss='mse')
     return model
+
 
 def load_model(name):
     # load json and create model
@@ -27,6 +26,7 @@ def load_model(name):
     loaded_model.load_weights(name + ".h5")
     loaded_model = compile_model(loaded_model)
     return loaded_model
+
 
 def save_model(model, name):
     # serialize model to JSON
@@ -40,7 +40,9 @@ def save_model(model, name):
     # serialize weights to HDF5
     model.save_weights(name + ".h5")
 
-def create_graphs(history,name=''): # http://flothesof.github.io/convnet-face-keypoint-detection.html
+
+# http://flothesof.github.io/convnet-face-keypoint-detection.html
+def create_graphs(history, name=''):
     # loss
     plt.figure()
     plt.plot(history.history['loss'])
@@ -75,23 +77,28 @@ if __name__ == "__main__":
     # l2 = 0.0001
 
     # this is the size of our encoded representations
-    encoding_dim = 2800  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
-    load = False
+    # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
+    encoding_dim = 2800
+    load = True
 
     if load:
-        autoencoder = load_model('/content/gdrive/My Drive/models/v4/model-300eps')
+        autoencoder = load_model(
+            '/content/gdrive/My Drive/models/v4/model-800eps')
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='relu')(input_img)
-        encoded = Dense(3440, activation='relu')(encoded)
-        encoded = Dense(2800, activation='relu')(encoded)
+        encoded = Dense(8400, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
+        encoded = Dense(3440, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
+        encoded = Dense(2800, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
 
-        decoded = Dense(3440, activation='relu')(encoded)
-        decoded = Dense(8400, activation='relu')(decoded)
-        decoded = Dense(12348, activation='relu')(decoded)
-
-        autoencoder = Model(input_img, decoded)
-        autoencoder = compile_model(autoencoder)
+        decoded = Dense(3440, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
+        decoded = Dense(8400, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
+        decoded = Dense(12348, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -99,23 +106,22 @@ if __name__ == "__main__":
     # checkpoint
     # filepath="weights-improvement-{epoch:02d}.hdf5"
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
-    callbacks_list = []#[checkpoint]
+    callbacks_list = []  # [checkpoint]
 
-
-    for i in range(100): # 100 epochs = 0.56h = 34 min
-        initial_epoch = 0
+    for i in range(100):  # 100 epochs = 0.56h = 34 min
+        initial_epoch = 800
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
-                        validation_split=0.20,
-                        batch_size=512,
-                        epochs=epochs,
-                        shuffle=True,
-                        callbacks=callbacks_list)
+                                  validation_split=0.20,
+                                  batch_size=512,
+                                  epochs=epochs,
+                                  shuffle=True,
+                                  callbacks=callbacks_list)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
         name = '/v4/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
-        save_model(autoencoder,'/content/gdrive/My Drive/models'+name)
-        create_graphs(history,'/content/gdrive/My Drive/graphs'+name)
+        save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
+        create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
