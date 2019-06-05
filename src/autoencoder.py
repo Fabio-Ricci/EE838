@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v4/model-800eps')
+            '/content/gdrive/My Drive/models/v5/model-800eps')
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu', kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
@@ -122,6 +122,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v4/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v5/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
