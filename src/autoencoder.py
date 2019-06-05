@@ -61,12 +61,7 @@ def create_graphs(history, name=''):
 
 
 if __name__ == "__main__":
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
-    wav_arr_ch1 = np.array(wav_arr_ch1)
-    wav_arr_ch2 = np.array(wav_arr_ch2)
-
-    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-    print(len(data[0]))
+    
 
     # inputs = 12348
     # hidden_1_size = 8400
@@ -110,6 +105,14 @@ if __name__ == "__main__":
     callbacks_list = []  # [checkpoint]
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
+        wav_arr_ch1 = np.array(wav_arr_ch1)
+        wav_arr_ch2 = np.array(wav_arr_ch2)
+
+        data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+        del(wav_arr_ch1, wav_arr_ch2, sample_rate)
+        print(len(data[0]))
+
         initial_epoch = 250
         epochs = 50
         # Fit the model
