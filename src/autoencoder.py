@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
