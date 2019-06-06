@@ -126,7 +126,7 @@ if __name__ == "__main__":
         # Fit the model
         history = autoencoder.fit(data, data,
                                   validation_split=0.20,
-                                  batch_size=128,
+                                  batch_size=128*8,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list)
