@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model, model_from_json
 from tensorflow.keras.layers import Input, Dense
 import tensorflow as tf
@@ -11,7 +12,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='mse')
+    model.compile(optimizer=tf.train.AdamOptimizer(0.0001), loss='mse')
     return model
 
 
@@ -58,7 +59,6 @@ def create_graphs(history, name=''):
         os.makedirs('/'.join(name.split('/')[:-1]))
     plt.savefig(name+'-training-info.png')
 
-
 if __name__ == "__main__":
     
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
@@ -98,19 +98,24 @@ if __name__ == "__main__":
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
 
+
+
     # checkpoint
     # filepath="weights-improvement-{epoch:02d}.hdf5"
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
+    TPU_ADDRESS = ''
+    try:
+        device_name = os.environ['COLAB_TPU_ADDR']
+        TPU_ADDRESS = 'grpc://' + device_name
+        print('Found TPU at: {}'.format(TPU_ADDRESS))
+    except KeyError:
+        print('TPU not found')
 
-    # This address identifies the TPU we'll use when configuring TensorFlow.
-    TPU_WORKER = 'grpc://' + os.environ['COLAB_TPU_ADDR']
-    tf.logging.set_verbosity(tf.logging.INFO)
-
-    autoencoder = tpu_model = tf.contrib.tpu.keras_to_tpu_model(
+    autoencoder = tf.contrib.tpu.keras_to_tpu_model(
     autoencoder,
     strategy=tf.contrib.tpu.TPUDistributionStrategy(
-        tf.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
+        tf.contrib.cluster_resolver.TPUClusterResolver(TPU_ADDRESS)))
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
@@ -121,17 +126,26 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2, sample_rate)
         print(len(data[0]))
 
-        initial_epoch = 750
+        def train_input_fn(batch_size=1024):
+            # Convert the inputs to a Dataset.
+            dataset = tf.data.Dataset.from_tensor_slices((data,data))
+        # Shuffle, repeat, and batch the examples.
+            dataset = dataset.cache()
+            dataset = dataset.shuffle(1000, reshuffle_each_iteration=True)
+            dataset = dataset.repeat()
+            dataset = dataset.batch(batch_size, drop_remainder=True)
+        # Return the dataset.
+            return dataset
+
+        initial_epoch = 700
         epochs = 50
         # Fit the model
-        history = autoencoder.fit(data, data,
+        history = autoencoder.fit(train_input_fn,
                                   validation_split=0.20,
-                                  batch_size=128*8,
                                   epochs=epochs,
-                                  shuffle=True,
                                   callbacks=callbacks_list)
 
-        score = autoencoder.evaluate(data, data, verbose=0)
+        score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
         print('Test loss:', score)
 
         name = '/v5/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
