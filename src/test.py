@@ -12,7 +12,7 @@ from tensorflow.contrib import ffmpeg
 import numpy as np
 from autoencoder import compile_model, load_model
 
-autoencoder = load_model('models/model-800eps')
+autoencoder = load_model('models/model-700eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()

@@ -11,7 +11,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='binary_crossentropy')
+    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='mse')
     return model
 
 
