@@ -18,9 +18,9 @@ def preprocess_data():
     wav_arr_ch2 = []
 
     for f in file_arr:
-        if i == 60:
-            break
-        i += 1
+        # if i == 60:
+        #     break
+        # i += 1
         audio_binary = tf.read_file(f)
         wav_decoder = decode_wav(
             audio_binary, desired_channels=2)
