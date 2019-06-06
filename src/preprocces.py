@@ -9,6 +9,7 @@ from glob import iglob
 DATA_FILES_WAV = 'songs_wav'
 
 def preprocess_data(sess):
+    print('lalala3')
     i = 0
     file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
     np.random.shuffle(file_arr)
