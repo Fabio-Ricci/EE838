@@ -18,7 +18,7 @@ def preprocess_data(sess):
     wav_arr_ch2 = []
 
     for f in file_arr:
-        if i == 15:
+        if i == 10:
             break
         i += 1
         audio_binary = tf.read_file(f)
