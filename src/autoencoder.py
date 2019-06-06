@@ -11,6 +11,7 @@ import os
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
+
 def compile_model(model):
     model.compile(optimizer=tf.train.AdamOptimizer(0.0001), loss='mse')
     return model
@@ -59,8 +60,8 @@ def create_graphs(history, name=''):
         os.makedirs('/'.join(name.split('/')[:-1]))
     plt.savefig(name+'-training-info.png')
 
+
 if __name__ == "__main__":
-    
 
     # inputs = 12348
     # hidden_1_size = 8400
@@ -92,8 +93,8 @@ if __name__ == "__main__":
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
 
-
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(tf.keras.backend.get_session())
+    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(
+        tf.keras.backend.get_session())
     wav_arr_ch1 = np.array(wav_arr_ch1)
     wav_arr_ch2 = np.array(wav_arr_ch2)
 
@@ -110,8 +111,8 @@ if __name__ == "__main__":
         print('TPU not found')
 
     autoencoder = tf.contrib.tpu.keras_to_tpu_model(
-    autoencoder,
-     strategy=tf.contrib.tpu.TPUDistributionStrategy(
+        autoencoder,
+        strategy=tf.contrib.tpu.TPUDistributionStrategy(
             tf.contrib.cluster_resolver.TPUClusterResolver(
                 tpu='grpc://' + os.environ['COLAB_TPU_ADDR'])
         )
@@ -128,7 +129,7 @@ if __name__ == "__main__":
 
         def train_input_fn(batch_size=1024):
             # Convert the inputs to a Dataset.
-            dataset = tf.data.Dataset.from_tensor_slices((data,data))
+            dataset = tf.data.Dataset.from_tensor_slices((data, data))
         # Shuffle, repeat, and batch the examples.
             dataset = dataset.cache()
             dataset = dataset.shuffle(1000, reshuffle_each_iteration=True)
@@ -143,7 +144,8 @@ if __name__ == "__main__":
         history = autoencoder.fit(train_input_fn,
                                   validation_split=0.20,
                                   epochs=epochs,
-                                  callbacks=callbacks_list)
+                                  callbacks=callbacks_list,
+                                  steps_per_epoch=60)
 
         score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
         print('Test loss:', score)
