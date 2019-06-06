@@ -145,8 +145,7 @@ if __name__ == "__main__":
                                   batch_size=128*4,
                                   validation_split=0.20,
                                   epochs=epochs,
-                                  callbacks=callbacks_list,
-                                  shuffle=True)
+                                  callbacks=callbacks_list)
 
         score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
         print('Test loss:', score)
