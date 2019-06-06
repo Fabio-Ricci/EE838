@@ -11,7 +11,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='mse')
+    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='binary_crossentropy')
     return model
 
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v6/model-50eps')
+            '/content/gdrive/My Drive/models/v6/model-100eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 50
+        initial_epoch = 100
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
