@@ -141,11 +141,12 @@ if __name__ == "__main__":
         initial_epoch = 700
         epochs = 50
         # Fit the model
-        history = autoencoder.fit((data, data),
-                                  batch_size=128*4
+        history = autoencoder.fit(data, data,
+                                  batch_size=128*4,
                                   validation_split=0.20,
                                   epochs=epochs,
                                   callbacks=callbacks_list,
+                                  shuffle=Ture,
                                   steps_per_epoch=60)
 
         score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
