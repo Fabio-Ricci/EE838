@@ -90,7 +90,6 @@ if __name__ == "__main__":
         decoded = Dense(12348, activation='relu')(decoded)
 
         autoencoder = Model(input_img, decoded)
-        autoencoder = compile_model(autoencoder)
 
 
 
@@ -110,6 +109,8 @@ if __name__ == "__main__":
     autoencoder,
     strategy=tf.contrib.tpu.TPUDistributionStrategy(
         tf.contrib.cluster_resolver.TPUClusterResolver(TPU_ADDRESS)))
+
+    autoencoder = compile_model(autoencoder)
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
