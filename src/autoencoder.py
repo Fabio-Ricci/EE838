@@ -142,7 +142,7 @@ if __name__ == "__main__":
         epochs = 50
         # Fit the model
         history = autoencoder.fit(train_input_fn,
-                                  batch_size=128*4,
+                                  steps_per_epoch=60,
                                   validation_split=0.20,
                                   epochs=epochs,
                                   callbacks=callbacks_list)
