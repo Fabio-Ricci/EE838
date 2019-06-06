@@ -12,7 +12,7 @@ from tensorflow.contrib import ffmpeg
 import numpy as np
 from autoencoder import compile_model, load_model
 
-autoencoder = load_model('models/model-700eps')
+autoencoder = load_model('models/model-50eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -37,22 +37,24 @@ for f in file_arr:
                                           for i in range((len(audio) + section_size - 1) // section_size)]
     i = 0
     for a in audios:
-        if i == 1000:
+        if i == 500:
             break
         i += 1
         if len(a[:, 0]) != section_size:
             print(len(a[:, 0]))
             print("wrong sample")
             continue
-        merged = np.hstack((rfft(a[:, 0]), rfft(a[:, 1])))
+        rfft0 = rfft(a[:, 0])
+        rfft1 = rfft(a[:, 1])
+        merged = np.hstack(((rfft0 * (1 / len(rfft0)) + 1) / 2, (rfft1 * (1 / len(rfft1)) + 1) / 2))
         merged = np.reshape(merged, (1,12348))
 
 
-        predicted = autoencoder.predict(merged)
-        # predicted = merged
+        # predicted = autoencoder.predict(merged)
+        predicted = merged
         splitted = np.hsplit(predicted[0], 2)
-        channel1 = irfft(splitted[0])
-        channel2 = irfft(splitted[1])
+        channel1 = irfft((splitted[0] / (1 / len(splitted[0])) - 1) * 2)
+        channel2 = irfft((splitted[1] / (1 / len(splitted[1])) - 1) * 2)
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
