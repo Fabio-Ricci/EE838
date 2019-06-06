@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v5/model-200eps')
+            '/content/gdrive/My Drive/models/v5/model-700eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -109,8 +109,17 @@ if __name__ == "__main__":
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
 
+    # This address identifies the TPU we'll use when configuring TensorFlow.
+    TPU_WORKER = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+    tf.logging.set_verbosity(tf.logging.INFO)
+
+    autoencoder = tpu_model = tf.contrib.tpu.keras_to_tpu_model(
+    autoencoder,
+    strategy=tf.contrib.tpu.TPUDistributionStrategy(
+        tf.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
+
     for i in range(100):  # 100 epochs = 0.56h = 34 min
-        initial_epoch = 200
+        initial_epoch = 700
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
