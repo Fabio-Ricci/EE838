@@ -113,7 +113,7 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2, sample_rate)
         print(len(data[0]))
 
-        initial_epoch = 300
+        initial_epoch = 350
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
