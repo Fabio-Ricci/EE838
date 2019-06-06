@@ -117,7 +117,7 @@ if __name__ == "__main__":
     print('lalala')
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(tf.keras.backend.get_session())
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 

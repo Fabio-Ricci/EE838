@@ -8,11 +8,10 @@ from glob import iglob
 
 DATA_FILES_WAV = 'songs_wav'
 
-def preprocess_data():
+def preprocess_data(sess):
     i = 0
     file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
     np.random.shuffle(file_arr)
-    sess = tf.Session()
 
     wav_arr_ch1 = []
     wav_arr_ch2 = []
@@ -48,6 +47,5 @@ def preprocess_data():
         print('Quitting')
         exit()
 
-    sess.close()
     return wav_arr_ch1, wav_arr_ch2, sample_rate
 
