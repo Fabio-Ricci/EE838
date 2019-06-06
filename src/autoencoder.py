@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model, model_from_json
 from tensorflow.keras.layers import Input, Dense
 import tensorflow as tf
@@ -11,9 +10,8 @@ import os
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-
 def compile_model(model):
-    model.compile(optimizer=tf.train.AdamOptimizer(0.0001), loss='mse')
+    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='mse')
     return model
 
 
@@ -62,6 +60,7 @@ def create_graphs(history, name=''):
 
 
 if __name__ == "__main__":
+    
 
     # inputs = 12348
     # hidden_1_size = 8400
@@ -78,76 +77,52 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v6/model-700eps')
+            '/content/gdrive/My Drive/models/v6/model-350eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='relu')(input_img)
-        encoded = Dense(3440, activation='relu')(encoded)
-        encoded = Dense(2800, activation='relu')(encoded)
+        encoded = Dense(8400, activation='relu',
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
+        encoded = Dense(3440, activation='relu',
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
+        encoded = Dense(2800, activation='relu',
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
 
-        decoded = Dense(3440, activation='relu')(encoded)
-        decoded = Dense(8400, activation='relu')(decoded)
-        decoded = Dense(12348, activation='relu')(decoded)
+        decoded = Dense(3440, activation='relu',
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
+        decoded = Dense(8400, activation='relu',
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
+        decoded = Dense(12348, activation='relu',
+                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
-
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(
-        tf.keras.backend.get_session())
-    wav_arr_ch1 = np.array(wav_arr_ch1)
-    wav_arr_ch2 = np.array(wav_arr_ch2)
 
     # checkpoint
     # filepath="weights-improvement-{epoch:02d}.hdf5"
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
-    TPU_ADDRESS = ''
-    try:
-        device_name = os.environ['COLAB_TPU_ADDR']
-        TPU_ADDRESS = 'grpc://' + device_name
-        print('Found TPU at: {}'.format(TPU_ADDRESS))
-    except KeyError:
-        print('TPU not found')
-
-    autoencoder = tf.contrib.tpu.keras_to_tpu_model(
-        autoencoder,
-        strategy=tf.contrib.tpu.TPUDistributionStrategy(
-            tf.contrib.cluster_resolver.TPUClusterResolver(
-                tpu='grpc://' + os.environ['COLAB_TPU_ADDR'])
-        )
-    )
-
-    print('lalala')
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
-        print('lalala2')
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
+        wav_arr_ch1 = np.array(wav_arr_ch1)
+        wav_arr_ch2 = np.array(wav_arr_ch2)
 
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2, sample_rate)
         print(len(data[0]))
 
-        def train_input_fn(batch_size=1024):
-            # Convert the inputs to a Dataset.
-            dataset = tf.data.Dataset.from_tensor_slices((data, data))
-        # Shuffle, repeat, and batch the examples.
-            dataset = dataset.cache()
-            dataset = dataset.shuffle(1000, reshuffle_each_iteration=True)
-            dataset = dataset.repeat()
-            dataset = dataset.batch(batch_size, drop_remainder=True)
-        # Return the dataset.
-            return dataset
-
-        initial_epoch = 700
+        initial_epoch = 0
         epochs = 50
         # Fit the model
-        history = autoencoder.fit(train_input_fn,
-                                  steps_per_epoch=600,
+        history = autoencoder.fit(data, data,
                                   validation_split=0.20,
+                                  batch_size=128,
                                   epochs=epochs,
+                                  shuffle=True,
                                   callbacks=callbacks_list)
 
-        score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
+        score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
         name = '/v6/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
