@@ -146,7 +146,7 @@ if __name__ == "__main__":
                                   validation_split=0.20,
                                   epochs=epochs,
                                   callbacks=callbacks_list,
-                                  shuffle=Ture,
+                                  shuffle=True,
                                   steps_per_epoch=60)
 
         score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
