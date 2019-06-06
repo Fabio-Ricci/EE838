@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import datetime
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense
+from tensorflow.python.keras.callbacks import ModelCheckpoint
+from tensorflow.python.keras.optimizers import Adam
+from tensorflow.python.keras.models import Model, model_from_json
+from tensorflow.python.keras.layers import Input, Dense
 import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
