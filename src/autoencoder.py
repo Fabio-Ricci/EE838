@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v5/model-400eps')
+            '/content/gdrive/My Drive/models/v5/model-350eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2, sample_rate)
         print(len(data[0]))
 
-        initial_epoch = 400
+        initial_epoch = 350
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
