@@ -77,23 +77,17 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v5/model-700eps')
+            '/content/gdrive/My Drive/models/v6/model-700eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
-        encoded = Dense(3440, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
-        encoded = Dense(2800, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
+        encoded = Dense(8400, activation='relu')(input_img)
+        encoded = Dense(3440, activation='relu')(encoded)
+        encoded = Dense(2800, activation='relu')(encoded)
 
-        decoded = Dense(3440, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
-        decoded = Dense(8400, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
-        decoded = Dense(12348, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
+        decoded = Dense(3440, activation='relu')(encoded)
+        decoded = Dense(8400, activation='relu')(decoded)
+        decoded = Dense(12348, activation='relu')(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -148,6 +142,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0, batch_size=128 * 8)
         print('Test loss:', score)
 
-        name = '/v5/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v6/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
