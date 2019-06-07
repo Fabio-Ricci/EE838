@@ -11,7 +11,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='mse')
+    model.compile(optimizer=tf.keras.optimizers.Adam(), loss='binary_crossentropy')
     return model
 
 
@@ -81,11 +81,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = False
+    load = True
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v7/model-600eps')
+            '/content/gdrive/My Drive/models/v6/model-650eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -93,14 +93,14 @@ if __name__ == "__main__":
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
         encoded = Dense(3440, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
-        encoded = Dense(2800, activation='sigmoid',
+        encoded = Dense(2800, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
 
         decoded = Dense(3440, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
         decoded = Dense(8400, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
-        decoded = Dense(12348, activation='sigmoid',
+        decoded = Dense(12348, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
 
         autoencoder = Model(input_img, decoded)
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 0
+        initial_epoch = 650
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
@@ -127,6 +127,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v7/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v6/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
