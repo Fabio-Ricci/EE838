@@ -89,7 +89,7 @@ if __name__ == "__main__":
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='sigmoid',
+        encoded = Dense(8400, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
         encoded = Dense(3440, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
