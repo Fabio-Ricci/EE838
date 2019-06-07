@@ -114,7 +114,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 600
+        initial_epoch = 0
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
