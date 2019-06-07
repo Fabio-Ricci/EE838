@@ -8,6 +8,14 @@ from glob import iglob
 
 DATA_FILES_WAV = 'songs_wav'
 
+def normalize(v):
+    min = np.amin(v)
+    max = np.amax(v)
+    return ((v - min) / (max - min)), min, max
+
+def unnormalize(v, min, max):
+    return v * (max - min) + min
+
 def preprocess_data():
     i = 0
     file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
@@ -36,9 +44,10 @@ def preprocess_data():
                 print(len(a[:, 0]))
                 print("wrong sample")
                 continue
-
-            wav_arr_ch1.append((rfft(a[:, 0]) * 1 / len(rfft(a[:, 0])) + 1) / 2)
-            wav_arr_ch2.append((rfft(a[:, 1]) * 1 / len(rfft(a[:, 1])) + 1) / 2)
+            rfft0, min0, max0 = normalize(rfft(a[:, 0]))
+            rfft1, min1, max1 = normalize(rfft(a[:, 1]))
+            wav_arr_ch1.append(rfft0)
+            wav_arr_ch2.append(rfft1)
         print("Returning File: " + f)
         print("sample rate", sample_rate)
     print("Number of returned chuncks", len(wav_arr_ch1))

@@ -11,6 +11,7 @@ from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav, encode
 from tensorflow.contrib import ffmpeg
 import numpy as np
 from autoencoder import compile_model, load_model
+from preprocces import normalize, unnormalize
 
 autoencoder = load_model('models/model-50eps')
 
@@ -44,17 +45,17 @@ for f in file_arr:
             print(len(a[:, 0]))
             print("wrong sample")
             continue
-        rfft0 = rfft(a[:, 0])
-        rfft1 = rfft(a[:, 1])
-        merged = np.hstack(((rfft0 / len(rfft0) + 1) / 2, (rfft1 / len(rfft1) + 1) / 2))
+        rfft0, min0, max0 = normalize(rfft(a[:, 0]))
+        rfft1, min1, max1 = normalize(rfft(a[:, 1]))
+        merged = np.hstack((rfft0, rfft1))
         merged = np.reshape(merged, (1,12348))
 
 
         # predicted = autoencoder.predict(merged)
         predicted = merged
         splitted = np.hsplit(predicted[0], 2)
-        channel1 = irfft((splitted[0] * len(splitted[0]) - 1) * 2)
-        channel2 = irfft((splitted[1] * len(splitted[1]) - 1) * 2)
+        channel1 = irfft(unnormalize(splitted[0], min0, max0))
+        channel2 = irfft(unnormalize(splitted[1], min1, max1))
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
