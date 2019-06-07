@@ -46,15 +46,15 @@ for f in file_arr:
             continue
         rfft0 = rfft(a[:, 0])
         rfft1 = rfft(a[:, 1])
-        merged = np.hstack(((rfft0 * (1 / len(rfft0)) + 1) / 2, (rfft1 * (1 / len(rfft1)) + 1) / 2))
+        merged = np.hstack(((rfft0 / len(rfft0) + 1) / 2, (rfft1 / len(rfft1) + 1) / 2))
         merged = np.reshape(merged, (1,12348))
 
 
         # predicted = autoencoder.predict(merged)
         predicted = merged
         splitted = np.hsplit(predicted[0], 2)
-        channel1 = irfft((splitted[0] / (1 / len(splitted[0])) - 1) * 2)
-        channel2 = irfft((splitted[1] / (1 / len(splitted[1])) - 1) * 2)
+        channel1 = irfft((splitted[0] * len(splitted[0]) - 1) * 2)
+        channel2 = irfft((splitted[1] * len(splitted[1]) - 1) * 2)
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
