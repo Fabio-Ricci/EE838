@@ -13,7 +13,7 @@ import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 
-autoencoder = load_model('models/model-50eps')
+autoencoder = load_model('models/model-100eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -51,8 +51,8 @@ for f in file_arr:
         merged = np.reshape(merged, (1,12348))
 
 
-        # predicted = autoencoder.predict(merged)
-        predicted = merged
+        predicted = autoencoder.predict(merged)
+        # predicted = merged
         splitted = np.hsplit(predicted[0], 2)
         channel1 = irfft(unnormalize(splitted[0], min0, max0))
         channel2 = irfft(unnormalize(splitted[1], min1, max1))
