@@ -11,6 +11,8 @@ DATA_FILES_WAV = 'songs_wav'
 def normalize(v):
     min = np.amin(v)
     max = np.amax(v)
+    if min == max:
+        return 0, min, max
     return ((v - min) / (max - min)), min, max
 
 def unnormalize(v, min, max):
