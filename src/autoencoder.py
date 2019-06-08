@@ -81,22 +81,22 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v6/model-1650eps')
+            '/content/gdrive/My Drive/models/v8/model-1650eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
-        encoded = Dense(3440, activation='relu',
+        encoded = Dense(4000, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
-        encoded = Dense(2800, activation='relu',
+        encoded = Dense(4000, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
 
-        decoded = Dense(3440, activation='relu',
+        decoded = Dense(4000, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
         decoded = Dense(8400, activation='relu',
                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 1650
+        initial_epoch = 0
         epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
@@ -127,6 +127,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v6/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v8/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
