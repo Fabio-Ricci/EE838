@@ -13,14 +13,14 @@ import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 
-autoencoder = load_model('models/model-50eps')
+autoencoder = load_model('models/model-850eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
 
-
+file_number = 0
 for f in file_arr:
     ch1_song = np.array([]).astype(float)
     ch2_song = np.array([]).astype(float)
@@ -72,4 +72,5 @@ for f in file_arr:
 		audio_arr, file_format='wav', samples_per_second=sample_rate)
 
     wav_file = sess.run(wav_encoder)
-    open('test_reconstructed/out.wav', 'wb').write(wav_file)
+    open('test_reconstructed/' + str(file_number) + ".wav", 'wb').write(wav_file)
+    file_number += 1
