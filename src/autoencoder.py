@@ -85,15 +85,15 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v10/model-590eps')
+            '/content/gdrive/My Drive/models/v11/model-590eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(12348, activation='relu')(input_img)
-        encoded = Dense(7000, activation='relu')(encoded)
-        encoded = Dense(4000, activation='relu')(encoded)
+        encoded = Dense(6000, activation='relu')(encoded)
+        encoded = Dense(2000, activation='relu')(encoded)
 
-        decoded = Dense(7000, activation='relu')(encoded)
+        decoded = Dense(6000, activation='relu')(encoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
@@ -120,6 +120,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v10/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v11/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
