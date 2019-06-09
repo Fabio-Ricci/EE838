@@ -13,7 +13,7 @@ import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 
-autoencoder = load_model('models/model-60eps')
+autoencoder = load_model('models/model-600eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -45,8 +45,8 @@ for f in file_arr:
             print(len(a[:, 0]))
             print("wrong sample")
             continue
-        rfft0, min0, max0 = normalize(rfft(a[:, 0]))
-        rfft1, min1, max1 = normalize(rfft(a[:, 1]))
+        rfft0, scaler0 = normalize(rfft(a[:, 0]))
+        rfft1, scaler1 = normalize(rfft(a[:, 1]))
         merged = np.hstack((rfft0, rfft1))
         merged = np.reshape(merged, (1,12348))
 
@@ -54,8 +54,8 @@ for f in file_arr:
         predicted = autoencoder.predict(merged)
         # predicted = merged
         splitted = np.hsplit(predicted[0], 2)
-        channel1 = irfft(unnormalize(splitted[0], min0, max0))
-        channel2 = irfft(unnormalize(splitted[1], min1, max1))
+        channel1 = irfft(unnormalize(splitted[0], scaler0))
+        channel2 = irfft(unnormalize(splitted[1], scaler1))
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))

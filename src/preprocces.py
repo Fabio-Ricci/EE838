@@ -4,23 +4,25 @@ import math
 import tensorflow as tf
 import numpy as np
 from glob import iglob
-
+from sklearn.preprocessing import StandardScaler
 
 DATA_FILES_WAV = 'songs_wav'
 
-def normalize(v):
-    min = np.amin(v)
-    max = np.amax(v)
-    if min == max:
-        return v, min, max
-    return ((v - min) / (max - min)), min, max
 
-def unnormalize(v, min, max):
-    return v * (max - min) + min
+def normalize(v):
+    scalerX = StandardScaler().fit(v.reshape(1, -1))
+
+    return scalerX.transform(v.reshape(1, -1))[0], scalerX
+
+
+def unnormalize(v, scaler):
+
+    return scaler.inverse_transform(v)
+
 
 def preprocess_data():
     i = 0
-    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
+    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))
     sess = tf.Session()
 
     wav_arr_ch1 = []
@@ -40,14 +42,15 @@ def preprocess_data():
         # We want to ensure that every song we look at has the same
         # number of samples!
         section_size = 12348 // 2
-        audios = [audio[i * section_size:(i + 1) * section_size] for i in range((len(audio) + section_size - 1) // section_size )] 
+        audios = [audio[i * section_size:(i + 1) * section_size]
+                  for i in range((len(audio) + section_size - 1) // section_size)]
         for a in audios:
             if len(a[:, 0]) != section_size:
                 print(len(a[:, 0]))
                 print("wrong sample")
                 continue
-            rfft0, min0, max0 = normalize(rfft(a[:, 0]))
-            rfft1, min1, max1 = normalize(rfft(a[:, 1]))
+            rfft0, scaler0 = normalize(rfft(a[:, 0]))
+            rfft1, scaler1 = normalize(rfft(a[:, 1]))
             wav_arr_ch1.append(rfft0)
             wav_arr_ch2.append(rfft1)
         print("Returning File: " + f)
@@ -60,4 +63,3 @@ def preprocess_data():
         exit()
 
     return wav_arr_ch1, wav_arr_ch2, sample_rate
-
