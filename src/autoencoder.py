@@ -89,19 +89,13 @@ if __name__ == "__main__":
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(input_img)
-        encoded = Dense(7000, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
-        encoded = Dense(4000, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
+        encoded = Dense(8400, activation='relu')(input_img)
+        encoded = Dense(7000, activation='relu')(encoded)
+        encoded = Dense(6000, activation='relu')(encoded)
 
-        decoded = Dense(7000, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(encoded)
-        decoded = Dense(8400, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
-        decoded = Dense(12348, activation='relu',
-                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001))(decoded)
+        decoded = Dense(7000, activation='relu')(encoded)
+        decoded = Dense(8400, activation='relu')(decoded)
+        decoded = Dense(12348, activation='relu')(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
