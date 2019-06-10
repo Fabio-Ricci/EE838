@@ -47,13 +47,14 @@ for f in file_arr:
             continue
         rfft0, scaler0 = normalize(rfft(a[:, 0]))
         rfft1, scaler1 = normalize(rfft(a[:, 1]))
-        
+
         merged = np.hstack((rfft0, rfft1))
         merged = np.reshape(merged, (1,12348))
 
 
-        predicted = autoencoder.predict(merged)
-        # predicted = merged
+        # predicted = autoencoder.predict(merged)
+        predicted = merged
+        
         splitted = np.hsplit(predicted[0], 2)
         channel1 = irfft(unnormalize(splitted[0], scaler0))
         channel2 = irfft(unnormalize(splitted[1], scaler1))

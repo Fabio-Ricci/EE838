@@ -10,9 +10,8 @@ DATA_FILES_WAV = 'songs_wav'
 
 
 def normalize(v):
-    scalerX = StandardScaler().fit(v.reshape(1, -1))
-
-    return scalerX.transform(v.reshape(1, -1))[0], scalerX
+    scalerX = StandardScaler().fit(v[:, np.newaxis])
+    return scalerX.transform(v[:, np.newaxis]).flatten(), scalerX
 
 
 def unnormalize(v, scaler):
