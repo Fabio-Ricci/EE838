@@ -81,7 +81,7 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         
 
         initial_epoch = 0
-        epochs = 50
+        epochs = 2
         # Fit the model
         history = autoencoder.fit(data, data,
                                   validation_split=0.20,
@@ -122,6 +122,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v12/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v13/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)

@@ -13,7 +13,7 @@ import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 
-autoencoder = load_model('models/model-200eps')
+autoencoder = load_model('models/model-100eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
