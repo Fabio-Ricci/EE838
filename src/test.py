@@ -13,7 +13,7 @@ import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 
-autoencoder = load_model('models/model-150eps')
+autoencoder = load_model('models/model-200eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -47,6 +47,7 @@ for f in file_arr:
             continue
         rfft0, scaler0 = normalize(rfft(a[:, 0]))
         rfft1, scaler1 = normalize(rfft(a[:, 1]))
+        
         merged = np.hstack((rfft0, rfft1))
         merged = np.reshape(merged, (1,12348))
 
