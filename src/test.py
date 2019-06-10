@@ -13,7 +13,7 @@ import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 
-autoencoder = load_model('models/model-2eps')
+autoencoder = load_model('models/model-2eps (1)')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -38,8 +38,8 @@ for f in file_arr:
                                           for i in range((len(audio) + section_size - 1) // section_size)]
     i = 0
     for a in audios:
-        # if i == 500:
-        #     break
+        if i == 500:
+            break
         i += 1
         if len(a[:, 0]) != section_size:
             print(len(a[:, 0]))

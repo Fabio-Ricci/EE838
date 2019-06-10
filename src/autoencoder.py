@@ -90,10 +90,13 @@ if __name__ == "__main__":
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(12348, activation='relu')(input_img)
+        encoded = Dense(7000, activation='relu')(encoded)
+        encoded = Dense(3000, activation='relu')(encoded)
+        encoded = Dense(500, activation='relu')(encoded)
 
-        encoded = Dense(1, activation='relu')(encoded)
-
-        decoded = Dense(12348, activation='sigmoid')(encoded)
+        decoded = Dense(3000, activation='relu')(encoded)
+        decoded = Dense(7000, activation='relu')(decoded)
+        decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -107,7 +110,7 @@ if __name__ == "__main__":
         
 
         initial_epoch = 0
-        epochs = 2
+        epochs = 50
         # Fit the model
         history = autoencoder.fit(data, data,
                                   validation_split=0.20,
@@ -119,6 +122,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v13/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v12/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
