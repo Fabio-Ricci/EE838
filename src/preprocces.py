@@ -35,7 +35,7 @@ def preprocess_data():
         song_wav_arr_ch1 = []
         song_wav_arr_ch2 = []
 
-        if i == 2:
+        if i == 50:
             break
         i += 1
         audio_binary = tf.read_file(f)
