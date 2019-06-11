@@ -51,6 +51,7 @@ def preprocess_data():
         rfft1 = rfft(audio[:, 1])
         song_wav_arr_ch1, scaler = normalize(rfft0)
         song_wav_arr_ch2, scaler = normalize(rfft1)
+        print("reconstructing")
         for s1, s2 in zip(song_wav_arr_ch1, song_wav_arr_ch2):
             if len(s1) != SECTION_SIZE:
                 print(len(s1))
