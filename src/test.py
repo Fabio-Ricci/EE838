@@ -45,8 +45,8 @@ for f in file_arr:
         i += 1
         if (i == 500):
             break
-        rfft0 = rfft(a[:, 0])
-        rfft1 = rfft(a[:, 1])
+        rfft0 = rfft(a[:, 0], overwrite_x=True)
+        rfft1 = rfft(a[:, 1], overwrite_x=True)
         song_wav_arr_ch1 = np.concatenate([song_wav_arr_ch1, rfft0])
         song_wav_arr_ch2 = np.concatenate([song_wav_arr_ch2, rfft1])
         print(len(song_wav_arr_ch1))
