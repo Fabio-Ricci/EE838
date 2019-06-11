@@ -32,6 +32,7 @@ def preprocess_data():
     wav_arr_ch2 = []
 
     for f in file_arr:
+        print(f)
         song_wav_arr_ch1 = []
         song_wav_arr_ch2 = []
 
