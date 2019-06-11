@@ -5,6 +5,7 @@ import tensorflow as tf
 import numpy as np
 from glob import iglob
 from sklearn.preprocessing import MinMaxScaler
+import pickle
 
 DATA_FILES_WAV = 'songs_wav'
 SECTION_SIZE = 12348 // 2
@@ -46,19 +47,26 @@ def preprocess_data():
             [wav_decoder.sample_rate,
              wav_decoder.audio])
         audio = np.array(audio)
+        print("audio ready")
 
         rfft0 = rfft(audio[:, 0])
         rfft1 = rfft(audio[:, 1])
         song_wav_arr_ch1, scaler = normalize(rfft0)
         song_wav_arr_ch2, scaler = normalize(rfft1)
-        print("reconstructing")
-        for s1, s2 in zip(song_wav_arr_ch1, song_wav_arr_ch2):
-            if len(s1) != SECTION_SIZE:
-                print(len(s1))
-                print("wrong sample")
-                continue
-            wav_arr_ch1.append(s1)
-            wav_arr_ch2.append(s2)
+        with open(f + '-0.pickle', 'wb') as handle:
+            pickle.dump(song_wav_arr_ch1, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+        with open(f + '-1.pickle', 'wb') as handle:
+            pickle.dump(song_wav_arr_ch2, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+        # print("reconstructing")
+        # for s1, s2 in zip(song_wav_arr_ch1, song_wav_arr_ch2):
+        #     if len(s1) != SECTION_SIZE:
+        #         print(len(s1))
+        #         print("wrong sample")
+        #         continue
+        #     wav_arr_ch1.append(s1)
+        #     wav_arr_ch2.append(s2)
         print("Returning File: " + f)
         print("sample rate", sample_rate)
 
