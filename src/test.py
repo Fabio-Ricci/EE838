@@ -12,8 +12,9 @@ from tensorflow.contrib import ffmpeg
 import numpy as np
 from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
+import matplotlib.pyplot as plt
 
-autoencoder = load_model('models/model-2eps (1)')
+autoencoder = load_model('models/model-50eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -37,18 +38,35 @@ for f in file_arr:
     audios = [audio[i * section_size:(i + 1) * section_size]
                                           for i in range((len(audio) + section_size - 1) // section_size)]
     i = 0
+
+    song_wav_arr_ch1 = np.array([])
+    song_wav_arr_ch2 = np.array([])
     for a in audios:
+        i += 1
+        if (i == 500):
+            break
+        rfft0 = rfft(a[:, 0])
+        rfft1 = rfft(a[:, 1])
+        song_wav_arr_ch1 = np.concatenate([song_wav_arr_ch1, rfft0])
+        song_wav_arr_ch2 = np.concatenate([song_wav_arr_ch2, rfft1])
+        print(len(song_wav_arr_ch1))
+    normalized1, scaler0 = normalize(song_wav_arr_ch1)
+    normalized2, scaler1 = normalize(song_wav_arr_ch1)
+
+    print("normalized")
+    i = 0
+    for norm1, norm2 in zip(normalized1, normalized2):
+        print(i)
+        print(norm1)
         if i == 500:
             break
         i += 1
-        if len(a[:, 0]) != section_size:
+        if len(norm1) != section_size:
             print(len(a[:, 0]))
             print("wrong sample")
             continue
-        rfft0, scaler0 = normalize(rfft(a[:, 0]))
-        rfft1, scaler1 = normalize(rfft(a[:, 1]))
 
-        merged = np.hstack((rfft0, rfft1))
+        merged = np.hstack((norm1, norm2))
         merged = np.reshape(merged, (1,12348))
 
 

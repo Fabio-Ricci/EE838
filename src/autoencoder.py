@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
         # decoded = Dense(4000, activation='relu')(encoded)
         # decoded = Dense(7000, activation='relu')(decoded)
-        decoded = Dense(12348, activation='relu')(encoded)
+        decoded = Dense(12348, activation='sigmoid')(encoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)

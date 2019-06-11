@@ -4,19 +4,23 @@ import math
 import tensorflow as tf
 import numpy as np
 from glob import iglob
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 DATA_FILES_WAV = 'songs_wav'
+SECTION_SIZE = 12348 // 2
 
 
 def normalize(v):
-    scalerX = StandardScaler().fit(v[:, np.newaxis])
-    return scalerX.transform(v[:, np.newaxis]).flatten(), scalerX
+    scalerX = MinMaxScaler().fit(v[:, np.newaxis])
+
+    audio = scalerX.transform(v[:, np.newaxis]).flatten()
+    audios = [audio[i * SECTION_SIZE:(i + 1) * SECTION_SIZE]
+                for i in range((len(audio) + SECTION_SIZE - 1) // SECTION_SIZE)]
+    return np.array(audios), scalerX
 
 
 def unnormalize(v, scaler):
-
-    return scaler.inverse_transform(v)
+    return scaler.inverse_transform(v[:, np.newaxis]).flatten()
 
 
 def preprocess_data():
@@ -28,7 +32,10 @@ def preprocess_data():
     wav_arr_ch2 = []
 
     for f in file_arr:
-        if i == 50:
+        song_wav_arr_ch1 = []
+        song_wav_arr_ch2 = []
+
+        if i == 2:
             break
         i += 1
         audio_binary = tf.read_file(f)
@@ -38,22 +45,21 @@ def preprocess_data():
             [wav_decoder.sample_rate,
              wav_decoder.audio])
         audio = np.array(audio)
-        # We want to ensure that every song we look at has the same
-        # number of samples!
-        section_size = 12348 // 2
-        audios = [audio[i * section_size:(i + 1) * section_size]
-                  for i in range((len(audio) + section_size - 1) // section_size)]
-        for a in audios:
-            if len(a[:, 0]) != section_size:
-                print(len(a[:, 0]))
+
+        rfft0 = rfft(audio[:, 0])
+        rfft1 = rfft(audio[:, 1])
+        song_wav_arr_ch1, scaler = normalize(rfft0)
+        song_wav_arr_ch2, scaler = normalize(rfft1)
+        for s1, s2 in zip(song_wav_arr_ch1, song_wav_arr_ch2):
+            if len(s1) != SECTION_SIZE:
+                print(len(s1))
                 print("wrong sample")
                 continue
-            rfft0, scaler0 = normalize(rfft(a[:, 0]))
-            rfft1, scaler1 = normalize(rfft(a[:, 1]))
-            wav_arr_ch1.append(rfft0)
-            wav_arr_ch2.append(rfft1)
+            wav_arr_ch1.append(s1)
+            wav_arr_ch2.append(s2)
         print("Returning File: " + f)
         print("sample rate", sample_rate)
+
     print("Number of returned chuncks", len(wav_arr_ch1))
 
     if len(wav_arr_ch1) <= 0:
