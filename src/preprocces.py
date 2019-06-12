@@ -34,9 +34,6 @@ def prepare_preprocess_data():
     wav_arr_ch2 = []
 
     for f in file_arr:
-        if i == 40:
-            break
-        i += 1
         print(f)
         song_wav_arr_ch1 = []
         song_wav_arr_ch2 = []
@@ -77,8 +74,12 @@ def preprocess_data():
     wav_arr_ch1 = []
     wav_arr_ch2 = []
     left_channel = True
-
+    
+    i = 0
     for f in file_arr:
+        if i == 50:
+            break
+        i += 1
         pickleFile = open(f, 'rb')
         data = pickle.load(pickleFile)
         for d in data:
