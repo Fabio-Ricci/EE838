@@ -34,7 +34,7 @@ def prepare_preprocess_data():
     wav_arr_ch2 = []
 
     for f in file_arr:
-        if i == 55:
+        if i == 40:
             break
         i += 1
         print(f)
