@@ -6,6 +6,7 @@ import numpy as np
 from glob import iglob
 from sklearn.preprocessing import MinMaxScaler
 import pickle
+import matplotlib.pyplot as plt
 
 DATA_FILES_WAV = 'songs_wav'
 PREPROCESSED_DATA = 'preprocessed'
@@ -29,9 +30,6 @@ def prepare_preprocess_data():
     i = 0
     file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))
     sess = tf.Session()
-
-    wav_arr_ch1 = []
-    wav_arr_ch2 = []
 
     for f in file_arr:
         print(f)
@@ -77,7 +75,7 @@ def preprocess_data():
     
     i = 0
     for f in file_arr:
-        if i == 50:
+        if i == 60:
             break
         i += 1
         pickleFile = open(f, 'rb')
@@ -103,3 +101,6 @@ def preprocess_data():
         exit()
 
     return wav_arr_ch1, wav_arr_ch2
+
+if __name__ == "__main__":
+    prepare_preprocess_data()

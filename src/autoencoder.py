@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
 import os
+import matplotlib.pyplot as plt
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -66,6 +67,8 @@ if __name__ == "__main__":
     wav_arr_ch2 = np.array(wav_arr_ch2)
 
     data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+    plt.plot(data[10])
+    plt.show()
     del(wav_arr_ch1, wav_arr_ch2)
     print(len(data[0]))
     
@@ -89,13 +92,13 @@ if __name__ == "__main__":
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(12348, activation='relu')(input_img)
-        # encoded = Dense(7000, activation='relu')(encoded)
-        # encoded = Dense(4000, activation='relu')(encoded)
-        # encoded = Dense(3000, activation='relu')(encoded)
+        encoded = Dense(12348, activation='sigmoid')(input_img)
+        # encoded = Dense(8000, activation='relu')(encoded)
+        # encoded = Dense(5000, activation='relu')(encoded)
+        # encoded = Dense(3500, activation='relu')(encoded)
 
-        # decoded = Dense(4000, activation='relu')(encoded)
-        # decoded = Dense(7000, activation='relu')(decoded)
+        # decoded = Dense(5000, activation='relu')(encoded)
+        # decoded = Dense(8000, activation='relu')(decoded)
         decoded = Dense(12348, activation='sigmoid')(encoded)
 
         autoencoder = Model(input_img, decoded)
