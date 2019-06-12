@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer="adadelta", loss='mse')
+    model.compile(optimizer="adadelta", loss='binary_crossentropy')
     return model
 
 
