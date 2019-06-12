@@ -93,11 +93,11 @@ if __name__ == "__main__":
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(12348, activation='sigmoid')(input_img)
-        encoded = Dense(8000, activation='sigmoid')(encoded)
-        encoded = Dense(6000, activation='sigmoid')(encoded)
+        # encoded = Dense(8000, activation='sigmoid')(encoded)
+        # encoded = Dense(6000, activation='sigmoid')(encoded)
 
-        decoded = Dense(5000, activation='sigmoid')(encoded)
-        decoded = Dense(12348, activation='sigmoid')(decoded)
+        # decoded = Dense(5000, activation='sigmoid')(encoded)
+        decoded = Dense(12348, activation='sigmoid')(encoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
