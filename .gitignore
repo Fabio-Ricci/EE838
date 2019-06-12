@@ -9,3 +9,5 @@ src/models
 
 test/
 test_reconstructed/
+
+preprocessed

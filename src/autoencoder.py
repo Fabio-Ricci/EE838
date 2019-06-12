@@ -61,12 +61,12 @@ def create_graphs(history, name=''):
 
 if __name__ == "__main__":
 
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data()
+    wav_arr_ch1, wav_arr_ch2 = preprocess_data()
     wav_arr_ch1 = np.array(wav_arr_ch1)
     wav_arr_ch2 = np.array(wav_arr_ch2)
 
     data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-    del(wav_arr_ch1, wav_arr_ch2, sample_rate)
+    del(wav_arr_ch1, wav_arr_ch2)
     print(len(data[0]))
     
 
