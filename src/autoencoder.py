@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v15/model-100eps')
+            '/content/gdrive/My Drive/models/v16/model-100eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -125,6 +125,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v15/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v16/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
