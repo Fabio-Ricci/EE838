@@ -75,7 +75,7 @@ def preprocess_data():
     
     i = 0
     for f in file_arr:
-        if i == 60:
+        if i == 70:
             break
         i += 1
         pickleFile = open(f, 'rb')
