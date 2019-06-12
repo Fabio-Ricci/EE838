@@ -14,7 +14,7 @@ from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 import matplotlib.pyplot as plt
 
-autoencoder = load_model('models/model-6eps')
+autoencoder = load_model('models/model-200eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -45,8 +45,8 @@ for f in file_arr:
         i += 1
         if (i == 500):
             break
-        rfft0 = rfft(a[:, 0], overwrite_x=True)
-        rfft1 = rfft(a[:, 1], overwrite_x=True)
+        rfft0 = rfft(a[:, 0])
+        rfft1 = rfft(a[:, 1])
         song_wav_arr_ch1 = np.concatenate([song_wav_arr_ch1, rfft0])
         song_wav_arr_ch2 = np.concatenate([song_wav_arr_ch2, rfft1])
         print(len(song_wav_arr_ch1))
@@ -67,13 +67,16 @@ for f in file_arr:
             continue
 
         merged = np.hstack((norm1, norm2))
+        plt.plot(norm1)
+        plt.show()
         merged = np.reshape(merged, (1,12348))
-
 
         predicted = autoencoder.predict(merged)
         # predicted = merged
         
         splitted = np.hsplit(predicted[0], 2)
+        plt.plot(splitted[0])
+        plt.show()
         channel1 = irfft(unnormalize(splitted[0], scaler0))
         channel2 = irfft(unnormalize(splitted[1], scaler1))
         print(ch1_song.shape)
