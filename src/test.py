@@ -14,11 +14,7 @@ from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 import matplotlib.pyplot as plt
 
-<<<<<<< HEAD
-autoencoder = load_model('models/model-100eps')
-=======
 autoencoder = load_model('models/model-200eps')
->>>>>>> e9fedddba6e900fed0b59cfa13aff1a73212e530
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
