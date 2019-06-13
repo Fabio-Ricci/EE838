@@ -119,7 +119,7 @@ if __name__ == "__main__":
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  initial_epoch=(i+1)*epochs)+initial_epoch)
+                                  initial_epoch=(i+1)*epochs + initial_epoch)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
