@@ -125,6 +125,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v16/model-'+str(((i+1)*epochs)+initial_epoch)+'eps'
+        name = '/v16/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
