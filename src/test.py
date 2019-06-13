@@ -14,7 +14,11 @@ from autoencoder import compile_model, load_model
 from preprocces import normalize, unnormalize
 import matplotlib.pyplot as plt
 
+<<<<<<< HEAD
 autoencoder = load_model('models/model-100eps')
+=======
+autoencoder = load_model('models/model-200eps')
+>>>>>>> e9fedddba6e900fed0b59cfa13aff1a73212e530
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -45,8 +49,8 @@ for f in file_arr:
         i += 1
         if (i == 500):
             break
-        rfft0 = rfft(a[:, 0], overwrite_x=True)
-        rfft1 = rfft(a[:, 1], overwrite_x=True)
+        rfft0 = rfft(a[:, 0])
+        rfft1 = rfft(a[:, 1])
         song_wav_arr_ch1 = np.concatenate([song_wav_arr_ch1, rfft0])
         song_wav_arr_ch2 = np.concatenate([song_wav_arr_ch2, rfft1])
         print(len(song_wav_arr_ch1))
@@ -70,7 +74,6 @@ for f in file_arr:
         plt.plot(merged)
         plt.show()
         # merged = np.reshape(merged, (1,12348))
-
 
         predicted = autoencoder.predict(merged)
         # predicted = merged

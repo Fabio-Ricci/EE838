@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.00001), loss='mse')
+    model.compile(optimizer="adadelta", loss='binary_crossentropy')
     return model
 
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         # Fit the model
         history = autoencoder.fit(data, data,
                                   validation_split=0.20,
-                                  batch_size=1024,
+                                  batch_size=128,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list)
