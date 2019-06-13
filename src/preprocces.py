@@ -69,8 +69,8 @@ def preprocess_data():
     file_arr = list(iglob(PREPROCESSED_DATA + '/*.pickle'))
     file_arr.sort()
 
-    wav_arr_ch1 = np.array([])
-    wav_arr_ch2 = np.array([])
+    wav_arr_ch1 = []
+    wav_arr_ch2 = []
     left_channel = True
     
     i = 0
@@ -87,10 +87,10 @@ def preprocess_data():
                 continue
             if left_channel:
                 left_channel = False
-                wav_arr_ch1 = np.append(wav_arr_ch1, d)
+                wav_arr_ch1.append(d)
             else: 
                 left_channel = True
-                wav_arr_ch2 = = np.append(wav_arr_ch2, d)
+                wav_arr_ch2.append(d)
         
 
     print("Number of returned chuncks", len(wav_arr_ch1), len(wav_arr_ch2))
