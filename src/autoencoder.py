@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
         initial_epoch = 150
         epochs = 50 
-        epochs = (i+1)*epochs)+initial_epoch
+        epochs = (i+1)*epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
                                   validation_split=0.20,
