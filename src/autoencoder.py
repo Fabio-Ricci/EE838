@@ -110,7 +110,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 150
+        initial_epoch = 650
         epochs = 50 
         epochs = (i+1)*epochs + initial_epoch
         # Fit the model
