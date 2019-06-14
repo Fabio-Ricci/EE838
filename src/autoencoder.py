@@ -8,6 +8,7 @@ import numpy as np
 from preprocces import preprocess_data
 import os
 import matplotlib.pyplot as plt
+import gc
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -96,7 +97,7 @@ if __name__ == "__main__":
     callbacks_list = []  # [checkpoint]
     scores = []
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
-            
+        gc.collect()
         wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
