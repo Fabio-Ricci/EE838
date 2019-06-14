@@ -42,7 +42,7 @@ def preprocess_data(batch_size):
         section_size = 12348 // 2
         
         a0 = rfft(audio[:, 0], overwrite_x=True))
-        a1 = rfft(audio[:, 1], overwrite_x=True)))
+        a1 = rfft(audio[:, 1], overwrite_x=True))
 
         s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
         s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
