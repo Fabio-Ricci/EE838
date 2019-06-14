@@ -79,11 +79,11 @@ def preprocess_data():
     for f in file_arr:
         if left_channel:
             left_channel = False
-            current_pair.concat(d)
+            current_pair.append(d)
         else: 
             left_channel = True
-            current_pair.concat(d)
-            file_pairs.concat(current_pair)
+            current_pair.append(d)
+            file_pairs.append(current_pair)
             current_pair = []
     
     print(file_pairs)
