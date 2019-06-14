@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 200
+        initial_epoch = 0
         epochs = 50 
         epochs = (i+1)*epochs + initial_epoch
         # Fit the model
