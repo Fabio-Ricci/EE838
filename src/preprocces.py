@@ -75,7 +75,8 @@ def preprocess_data():
     wav_arr_ch1 = []
     wav_arr_ch2 = []
     left_channel = True
-    
+    current_pair = []
+
     for f in file_arr:
         if left_channel:
             left_channel = False
