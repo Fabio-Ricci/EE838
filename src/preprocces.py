@@ -87,8 +87,8 @@ def preprocess_data():
             file_pairs.append(current_pair)
             current_pair = []
 
-    print(file_pairs)
-    random.shuffle(current_pair)
+    random.shuffle(file_pairs)
+    print(file_pairs[0])
 
     pickleFile = open(file_pairs[0][0], 'rb')
     data = pickle.load(pickleFile)
