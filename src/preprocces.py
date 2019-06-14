@@ -37,6 +37,7 @@ def preprocess_data(batch_size):
         audio = np.array(audio)
         audio = audio[:5292000]
         print(len(audio[:, 0]))
+        print(audio.shape)
         # We want to ensure that every song we look at has the same
         # number of samples!
         section_size = 12348 // 2
