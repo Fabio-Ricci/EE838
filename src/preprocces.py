@@ -35,6 +35,7 @@ def preprocess_data(batch_size):
             [wav_decoder.sample_rate,
              wav_decoder.audio])
         audio = np.array(audio)
+        audio = audio[:5292000]
         # We want to ensure that every song we look at has the same
         # number of samples!
         section_size = 12348 // 2
