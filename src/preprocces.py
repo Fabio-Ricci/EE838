@@ -7,6 +7,8 @@ from glob import iglob
 from sklearn.preprocessing import MinMaxScaler
 import pickle
 import matplotlib.pyplot as plt
+import random
+
 
 DATA_FILES_WAV = 'songs_wav'
 PREPROCESSED_DATA = 'preprocessed'
@@ -74,8 +76,6 @@ def preprocess_data():
     wav_arr_ch2 = []
     left_channel = True
     
-    i = 0
-    current_pair = []
     for f in file_arr:
         if left_channel:
             left_channel = False
@@ -85,26 +85,29 @@ def preprocess_data():
             current_pair.append(f)
             file_pairs.append(current_pair)
             current_pair = []
-    
-    print(file_pairs)
 
-    # for f in file_arr:
-    #     if i == 70:
-    #         break
-    #     i += 1
-    #     pickleFile = open(f, 'rb')
-    #     data = pickle.load(pickleFile)
-    #     for d in data:
-    #         if len(d) != SECTION_SIZE:
-    #             print("wrong sample size")
-    #             print(len(d))
-    #             continue
-    #         if left_channel:
-    #             left_channel = False
-    #             wav_arr_ch1.append(d)
-    #         else: 
-    #             left_channel = True
-    #             wav_arr_ch2.append(d)
+    print(file_pairs)
+    random.shuffle(current_pair)
+
+    pickleFile = open(file_pairs[0, 0], 'rb')
+    data = pickle.load(pickleFile)
+    for d in data:
+        if len(d) != SECTION_SIZE:
+            print("wrong sample size")
+            print(len(d))
+            continue
+
+        wav_arr_ch1.append(d)
+
+    pickleFile = open(file_pairs[0, 1], 'rb')
+    data = pickle.load(pickleFile)
+    for d in data:
+        if len(d) != SECTION_SIZE:
+            print("wrong sample size")
+            print(len(d))
+            continue
+
+        wav_arr_ch2.append(d)
         
 
     print("Number of returned chuncks", len(wav_arr_ch1), len(wav_arr_ch2))

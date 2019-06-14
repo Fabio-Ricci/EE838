@@ -62,17 +62,6 @@ def create_graphs(history, name=''):
 
 if __name__ == "__main__":
 
-    wav_arr_ch1, wav_arr_ch2 = preprocess_data()
-    wav_arr_ch1 = np.array(wav_arr_ch1)
-    wav_arr_ch2 = np.array(wav_arr_ch2)
-
-    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-    plt.plot(data[10])
-    plt.show()
-    del(wav_arr_ch1, wav_arr_ch2)
-    print(len(data[0]))
-    
-
     # inputs = 12348
     # hidden_1_size = 8400
     # hidden_2_size = 3440
@@ -108,23 +97,32 @@ if __name__ == "__main__":
     callbacks_list = []  # [checkpoint]
 
     for i in range(100):  # 100 epochs = 0.56h = 34 min
-        
+            
+        wav_arr_ch1, wav_arr_ch2 = preprocess_data()
+        wav_arr_ch1 = np.array(wav_arr_ch1)
+        wav_arr_ch2 = np.array(wav_arr_ch2)
 
+        data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+        plt.plot(data[10])
+        plt.show()
+        del(wav_arr_ch1, wav_arr_ch2)
+        
         initial_epoch = 0
-        epochs = 50 
+        epochs = 1 
         epochs = (i+1)*epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
-                                  validation_split=0.20,
+                                  validation_split=0,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  batch_size=128,
-                                  initial_epoch=epochs - 50)
+                                  batch_size=len(data),
+                                  initial_epoch=epochs - 1)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v17/model-'+str(epochs)+'eps'
-        save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
-        create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
+        if epochs % 50 == 0:
+            name = '/v17/model-'+str(epochs)+'eps'
+            save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
+            create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
