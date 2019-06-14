@@ -36,12 +36,13 @@ def preprocess_data(batch_size):
              wav_decoder.audio])
         audio = np.array(audio)
         audio = audio[:5292000]
+        print(len(audio[:, 0]))
         # We want to ensure that every song we look at has the same
         # number of samples!
         section_size = 12348 // 2
         
-        a0 = rfft(audio[:, 0])
-        a1 = rfft(audio[:, 1])
+        a0 = rfft(audio[:, 0], overwrite_x=True))
+        a1 = rfft(audio[:, 1], overwrite_x=True)))
 
         s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
         s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
