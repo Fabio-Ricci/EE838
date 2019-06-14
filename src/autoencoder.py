@@ -121,6 +121,8 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         scores.append(score)
         print('Test loss:', score)
+        del(data)
+
 
         if epochs % 50 == 0:
             name = '/v19/model-'+str(epochs)+'eps'
