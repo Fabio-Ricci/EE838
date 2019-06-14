@@ -68,12 +68,26 @@ def preprocess_data():
     i = 0
     file_arr = list(iglob(PREPROCESSED_DATA + '/*.pickle'))
     file_arr.sort()
+    file_pairs = []
 
     wav_arr_ch1 = []
     wav_arr_ch2 = []
     left_channel = True
     
     i = 0
+    current_pair = []
+    for f in file_arr:
+        if left_channel:
+            left_channel = False
+            current_pair.concat(d)
+        else: 
+            left_channel = True
+            current_pair.concat(d)
+            file_pairs.concat(current_pair)
+            current_pair = []
+    
+    print(file_pairs)
+
     for f in file_arr:
         if i == 70:
             break
