@@ -35,7 +35,7 @@ def preprocess_data(batch_size):
             [wav_decoder.sample_rate,
              wav_decoder.audio])
         audio = np.array(audio)
-        audio = audio[:5292000]
+        audio = audio[:5280000]
         print(len(audio[:, 0]))
         print(audio.shape)
         # We want to ensure that every song we look at has the same
