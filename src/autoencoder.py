@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer="adadelta", loss='binary_crossentropy')
+    model.compile(optimizer="adam", loss='mse')
     return model
 
 
@@ -96,7 +96,8 @@ if __name__ == "__main__":
         # encoded = Dense(6000, activation='relu')(encoded)
 
         # decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(12348, activation='sigmoid')(input_img)
+        decoded = Dense(15000, activation='sigmoid')(input_img)
+        decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -118,6 +119,7 @@ if __name__ == "__main__":
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
+                                  batch_size=128,
                                   initial_epoch=epochs - 50)
 
         score = autoencoder.evaluate(data, data, verbose=0)
