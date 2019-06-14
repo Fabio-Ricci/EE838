@@ -42,15 +42,14 @@ def save_model(model, name):
 
 
 # http://flothesof.github.io/convnet-face-keypoint-detection.html
-def create_graphs(history, name=''):
+def create_graphs(scores, name=''):
     # loss
     plt.figure()
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
+    plt.plot(scores)
     plt.title('model loss')
     plt.ylabel('loss')
     plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
+    plt.legend(['train'], loc='upper left')
     # plt.show()
     plt.tight_layout()
     if name == '':
@@ -95,7 +94,7 @@ if __name__ == "__main__":
     # filepath="weights-improvement-{epoch:02d}.hdf5"
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
-
+    scores = []
     for i in range(100):  # 100 epochs = 0.56h = 34 min
             
         wav_arr_ch1, wav_arr_ch2 = preprocess_data()
@@ -120,9 +119,10 @@ if __name__ == "__main__":
                                   initial_epoch=epochs - 1)
 
         score = autoencoder.evaluate(data, data, verbose=0)
+        scores.append(score)
         print('Test loss:', score)
 
         if epochs % 50 == 0:
             name = '/v17/model-'+str(epochs)+'eps'
             save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
-            create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
+            create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
