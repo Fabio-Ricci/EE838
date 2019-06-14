@@ -66,6 +66,7 @@ def preprocess_data(batch_size):
         print('Quitting')
         exit()
 
+    sess.close()
     return wav_arr_ch1, wav_arr_ch2, sample_rate
 
 
