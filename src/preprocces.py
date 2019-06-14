@@ -88,23 +88,23 @@ def preprocess_data():
     
     print(file_pairs)
 
-    for f in file_arr:
-        if i == 70:
-            break
-        i += 1
-        pickleFile = open(f, 'rb')
-        data = pickle.load(pickleFile)
-        for d in data:
-            if len(d) != SECTION_SIZE:
-                print("wrong sample size")
-                print(len(d))
-                continue
-            if left_channel:
-                left_channel = False
-                wav_arr_ch1.append(d)
-            else: 
-                left_channel = True
-                wav_arr_ch2.append(d)
+    # for f in file_arr:
+    #     if i == 70:
+    #         break
+    #     i += 1
+    #     pickleFile = open(f, 'rb')
+    #     data = pickle.load(pickleFile)
+    #     for d in data:
+    #         if len(d) != SECTION_SIZE:
+    #             print("wrong sample size")
+    #             print(len(d))
+    #             continue
+    #         if left_channel:
+    #             left_channel = False
+    #             wav_arr_ch1.append(d)
+    #         else: 
+    #             left_channel = True
+    #             wav_arr_ch2.append(d)
         
 
     print("Number of returned chuncks", len(wav_arr_ch1), len(wav_arr_ch2))
