@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def compile_model(model):
-    model.compile(optimizer="adam", loss='mse')
+    model.compile(optimizer=tf.train.AdamOptimizer(0.001), loss='mse')
     return model
 
 
@@ -84,8 +84,8 @@ if __name__ == "__main__":
         # encoded = Dense(6000, activation='relu')(encoded)
 
         # decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(15000, activation='relu')(input_img)
-        decoded = Dense(12348, activation='sigmoid')(decoded)
+        decoded = Dense(15000, activation=tf.nn.elu)(input_img)
+        decoded = Dense(12348, activation=tf.nn.elu)(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     scores = []
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
             
-        wav_arr_ch1, wav_arr_ch2 = preprocess_data()
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
@@ -111,18 +111,18 @@ if __name__ == "__main__":
         epochs = (i+1)*epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
-                                  validation_split=0,
+                                  validation_split=0.2,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  batch_size=len(data),
+                                  batch_size=128,
                                   initial_epoch=epochs - 1)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         scores.append(score)
         print('Test loss:', score)
 
-        if epochs % 1000 == 0:
-            name = '/v18/model-'+str(epochs)+'eps'
+        if epochs % 50 == 0:
+            name = '/v19/model-'+str(epochs)+'eps'
             save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
             create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)

@@ -10,34 +10,24 @@ import matplotlib.pyplot as plt
 import random
 
 
-DATA_FILES_WAV = 'songs_wav'
+DATA_FILES_WAV = 'audio_wav'
 PREPROCESSED_DATA = 'preprocessed'
 SECTION_SIZE = 12348 // 2
 
 
-def normalize(v):
-    scalerX = MinMaxScaler().fit(v[:, np.newaxis])
-
-    audio = scalerX.transform(v[:, np.newaxis]).flatten()
-    audios = [audio[i * SECTION_SIZE:(i + 1) * SECTION_SIZE]
-                for i in range((len(audio) + SECTION_SIZE - 1) // SECTION_SIZE)]
-    return np.array(audios), scalerX
-
-
-def unnormalize(v, scaler):
-    return scaler.inverse_transform(v[:, np.newaxis]).flatten()
-
-
-def prepare_preprocess_data():
+def preprocess_data(batch_size):
     i = 0
-    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))
+    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
+    np.random.shuffle(file_arr)
     sess = tf.Session()
 
-    for f in file_arr:
-        print(f)
-        song_wav_arr_ch1 = []
-        song_wav_arr_ch2 = []
+    wav_arr_ch1 = []
+    wav_arr_ch2 = []
 
+    for f in file_arr:
+        if i == batch_size:
+            break
+        i += 1
         audio_binary = tf.read_file(f)
         wav_decoder = decode_wav(
             audio_binary, desired_channels=2)
@@ -45,80 +35,34 @@ def prepare_preprocess_data():
             [wav_decoder.sample_rate,
              wav_decoder.audio])
         audio = np.array(audio)
-        print("audio ready")
-        audios = [audio[i * SECTION_SIZE:(i + 1) * SECTION_SIZE]
-                for i in range((len(audio) + SECTION_SIZE - 1) // SECTION_SIZE)]
-        rfft0 = []
-        rfft1 = []
-        for a in audios:
-            rfft0.extend(rfft(a[:, 0]))
-            rfft1.extend(rfft(a[:, 1]))
-        rfft0 = np.array(rfft0)
-        rfft1 = np.array(rfft1)
-        print(rfft0)
-        print("rfft done")
-        song_wav_arr_ch1, scaler = normalize(rfft0)
-        song_wav_arr_ch2, scaler = normalize(rfft1)
-        print("scaling done")
-        with open(f + '-0.pickle', 'wb') as handle:
-            pickle.dump(song_wav_arr_ch1, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-        with open(f + '-1.pickle', 'wb') as handle:
-            pickle.dump(song_wav_arr_ch2, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-def preprocess_data():
-    i = 0
-    file_arr = list(iglob(PREPROCESSED_DATA + '/*.pickle'))
-    file_arr.sort()
-    file_pairs = []
-
-    wav_arr_ch1 = []
-    wav_arr_ch2 = []
-    left_channel = True
-    current_pair = []
-
-    for f in file_arr:
-        if left_channel:
-            left_channel = False
-            current_pair.append(f)
-        else: 
-            left_channel = True
-            current_pair.append(f)
-            file_pairs.append(current_pair)
-            current_pair = []
-
-    random.shuffle(file_pairs)
-    print(file_pairs[0])
-
-    pickleFile = open(file_pairs[0][0], 'rb')
-    data = pickle.load(pickleFile)
-    for d in data:
-        if len(d) != SECTION_SIZE:
-            print("wrong sample size")
-            print(len(d))
-            continue
-
-        wav_arr_ch1.append(d)
-
-    pickleFile = open(file_pairs[0][1], 'rb')
-    data = pickle.load(pickleFile)
-    for d in data:
-        if len(d) != SECTION_SIZE:
-            print("wrong sample size")
-            print(len(d))
-            continue
-
-        wav_arr_ch2.append(d)
+        # We want to ensure that every song we look at has the same
+        # number of samples!
+        section_size = 12348 // 2
         
+        a0 = rfft(audio[:, 0])
+        a1 = rfft(audio[:, 1])
 
-    print("Number of returned chuncks", len(wav_arr_ch1), len(wav_arr_ch2))
+        s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+        s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+
+        for a in zip(s_a0, s_a1):
+            if len(a[0]) != section_size:
+                print(len(a[0]))
+                print("wrong sample")
+                continue
+            wav_arr_ch1.append(a[0])
+            wav_arr_ch2.append(a[1])
+        print("Returning File: " + f)
+        print("sample rate", sample_rate)
+    print("Number of returned chuncks", len(wav_arr_ch1))
 
     if len(wav_arr_ch1) <= 0:
         print('No data')
         print('Quitting')
         exit()
 
-    return wav_arr_ch1, wav_arr_ch2
+    return wav_arr_ch1, wav_arr_ch2, sample_rate
+
 
 if __name__ == "__main__":
     prepare_preprocess_data()
