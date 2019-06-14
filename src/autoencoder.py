@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v17/model-200eps')
+            '/content/gdrive/My Drive/models/v18/model-200eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
     scores = []
-    for i in range(100):  # 100 epochs = 0.56h = 34 min
+    for i in range(30000):  # 100 epochs = 0.56h = 34 min
             
         wav_arr_ch1, wav_arr_ch2 = preprocess_data()
         wav_arr_ch1 = np.array(wav_arr_ch1)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         scores.append(score)
         print('Test loss:', score)
 
-        if epochs % 50 == 0:
-            name = '/v17/model-'+str(epochs)+'eps'
+        if epochs % 1000 == 0:
+            name = '/v18/model-'+str(epochs)+'eps'
             save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
             create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
