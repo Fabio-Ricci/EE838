@@ -90,7 +90,7 @@ def preprocess_data():
     print(file_pairs)
     random.shuffle(current_pair)
 
-    pickleFile = open(file_pairs[0, 0], 'rb')
+    pickleFile = open(file_pairs[0][0], 'rb')
     data = pickle.load(pickleFile)
     for d in data:
         if len(d) != SECTION_SIZE:
@@ -100,7 +100,7 @@ def preprocess_data():
 
         wav_arr_ch1.append(d)
 
-    pickleFile = open(file_pairs[0, 1], 'rb')
+    pickleFile = open(file_pairs[0][1], 'rb')
     data = pickle.load(pickleFile)
     for d in data:
         if len(d) != SECTION_SIZE:
