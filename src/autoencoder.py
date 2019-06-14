@@ -92,11 +92,11 @@ if __name__ == "__main__":
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(8000, activation='relu')(input_img)
-        encoded = Dense(6000, activation='relu')(encoded)
+        # encoded = Dense(8000, activation='relu')(input_img)
+        # encoded = Dense(6000, activation='relu')(encoded)
 
-        decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(12348, activation='sigmoid')(decoded)
+        # decoded = Dense(8000, activation='relu')(encoded)
+        decoded = Dense(12348, activation='sigmoid')(input_img)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
