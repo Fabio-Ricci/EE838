@@ -84,20 +84,19 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v16/model-2150eps')
+            '/content/gdrive/My Drive/models/v17/model-2150eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(12348, activation='sigmoid')(input_img)
-        # encoded = Dense(8000, activation='sigmoid')(encoded)
-        # encoded = Dense(6000, activation='sigmoid')(encoded)
+        encoded = Dense(8000, activation='relu')(encoded)(input_img)
+        encoded = Dense(6000, activation='relu')(encoded)
 
-        # decoded = Dense(5000, activation='sigmoid')(encoded)
-        decoded = Dense(12348, activation='sigmoid')(encoded)
+        decoded = Dense(8000, activation='relu')(encoded)
+        decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -110,7 +109,7 @@ if __name__ == "__main__":
     for i in range(100):  # 100 epochs = 0.56h = 34 min
         
 
-        initial_epoch = 300
+        initial_epoch = 0
         epochs = 50 
         epochs = (i+1)*epochs + initial_epoch
         # Fit the model
@@ -125,6 +124,6 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         print('Test loss:', score)
 
-        name = '/v16/model-'+str(epochs)+'eps'
+        name = '/v17/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
