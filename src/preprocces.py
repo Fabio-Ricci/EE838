@@ -22,9 +22,8 @@ def normalize(v):
     #     if np.abs(z_score) > 3:
     #         v[i] = mean
     m =  max(np.amax(v), abs(np.amin(v)))
-    m = (m + 1) / 2
     audio = v / m
-
+    audio = (audio + 1) / 2
     # audio = scalerX.transform(v[:, np.newaxis]).flatten()
 
     return audio, m
