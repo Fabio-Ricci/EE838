@@ -126,7 +126,7 @@ if __name__ == "__main__":
         num_epochs = 10
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
-        history = autoencoder.fit(np.array([data[0]]), np.array([data[0]]),
+        history = autoencoder.fit(data, data,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
