@@ -79,8 +79,8 @@ for f in file_arr:
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
-    ch1_song = ch1_song * max1
-    ch2_song = ch2_song * max2
+    ch1_song = ((ch1_song - 1) * 2) * max1
+    ch2_song = ((ch2_song - 1) * 2) * max2
     ch1_song = irfft(ch1_song)
     ch2_song = irfft(ch2_song)
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)

@@ -78,17 +78,27 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v18/model-200eps')
+            '/content/gdrive/My Drive/models/v20/model-200eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        # encoded = Dense(8000, activation='relu')(input_img)
-        # encoded = Dense(6000, activation='relu')(encoded)
-
-        # decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(15000, activation='relu',
+        encoded = Dense(9000, activation='relu',
                         kernel_initializer=tf.keras.initializers.VarianceScaling(),
                         kernel_regularizer=tf.keras.regularizers.l2(0.0001))(input_img)
+        encoded = Dense(8000, activation='relu',
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(encoded)
+
+        encoded = Dense(6000, activation='relu',
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(encoded)
+
+        decoded = Dense(8000, activation='relu',
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(encoded),
+        decoded = Dense(9000, activation='relu',
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(decoded)
         decoded = Dense(12348, activation='sigmoid',
                         kernel_initializer=tf.keras.initializers.VarianceScaling(),
                         kernel_regularizer=tf.keras.regularizers.l2(0.0001))(decoded)
@@ -103,7 +113,7 @@ if __name__ == "__main__":
     scores = []
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
         gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(1)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
@@ -113,7 +123,7 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2)
 
         initial_epoch = 0
-        num_epochs = 10000
+        num_epochs = 10
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(np.array([data[0]]), np.array([data[0]]),
@@ -129,6 +139,6 @@ if __name__ == "__main__":
         del(data)
 
         if epochs % 50 == 0:
-            name = '/v19/model-'+str(epochs)+'eps'
+            name = '/v20/model-'+str(epochs)+'eps'
             save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
             create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)

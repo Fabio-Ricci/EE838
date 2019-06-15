@@ -28,11 +28,6 @@ def normalize(v):
 
     return audio, m
 
-
-def unnormalize(v, scaler):
-    return scaler.inverse_transform(v[:, np.newaxis]).flatten()
-
-
 def preprocess_data(batch_size):
     i = 0
     file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
