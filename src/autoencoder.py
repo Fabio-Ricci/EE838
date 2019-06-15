@@ -103,7 +103,7 @@ if __name__ == "__main__":
     scores = []
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
         gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = prerocess_data(50)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
@@ -113,15 +113,15 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2)
 
         initial_epoch = 0
-        epochs = 1
-        epochs = (i+1)*epochs + initial_epoch
+        num_epochs = 10
+        epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
                                   batch_size=128,
-                                  initial_epoch=epochs - 1)
+                                  initial_epoch=epochs - num_epochs)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         scores.append(score)
