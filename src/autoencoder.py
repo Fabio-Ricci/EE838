@@ -81,7 +81,7 @@ if __name__ == "__main__":
             '/content/gdrive/My Drive/models/v18/model-200eps')
         print("model loaded succesfully")
     else:
-        input_img = Input(shape=(None, 12348))
+        input_img = Input(shape=(12348,))
         # encoded = Dense(8000, activation='relu')(input_img)
         # encoded = Dense(6000, activation='relu')(encoded)
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     scores = []
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
         gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = prerocess_data(50)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
