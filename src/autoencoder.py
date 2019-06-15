@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense
+from tensorflow.keras.layers import Input, Dense, Flatten
 import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
@@ -86,7 +86,8 @@ if __name__ == "__main__":
         # encoded = Dense(6000, activation='relu')(encoded)
 
         # decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(15000, activation=tf.keras.layers.ELU)(input_img)
+        encoded = Flatten(Input)
+        decoded = Dense(15000, activation=tf.keras.layers.ELU)(encoded)
         decoded = Dense(12348, activation=tf.keras.layers.ELU,
                         kernel_initializer=tf.keras.initializers.VarianceScaling(),
                         kernel_regularizer=tf.keras.regularizers.l2(0.0001))(decoded)
