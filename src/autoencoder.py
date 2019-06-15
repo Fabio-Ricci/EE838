@@ -81,7 +81,7 @@ if __name__ == "__main__":
             '/content/gdrive/My Drive/models/v18/model-200eps')
         print("model loaded succesfully")
     else:
-        input_img = Input(shape=(12348,))
+        input_img = Input(shape=(,12348))
         # encoded = Dense(8000, activation='relu')(input_img)
         # encoded = Dense(6000, activation='relu')(encoded)
 
