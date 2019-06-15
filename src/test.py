@@ -64,23 +64,24 @@ for f in file_arr:
             continue
 
         merged = np.hstack((norm1, norm2))
-        plt.plot(merged)
-        plt.show()
+        # plt.plot(merged)
+        # plt.show()
         merged = np.reshape(merged, (1,12348))
         # predicted = autoencoder.predict(merged)
         predicted = merged
         
         splitted = np.hsplit(predicted[0], 2)
-        plt.plot(predicted[0])
-        plt.show()
+        # plt.plot(predicted[0])
+        # plt.show()
         channel1 = splitted[0]
         channel2 = splitted[1]
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
-    ch1_song = irfft(ch1_song)
-    ch2_song = irfft(ch2_song)
+
+    ch1_song = irfft(ch1_song* max1)
+    ch2_song = irfft(ch2_song * max2)
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)
     cols = 2
     rows = math.floor(len(audio_arr)/2)
