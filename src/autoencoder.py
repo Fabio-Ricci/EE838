@@ -14,7 +14,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='mse')
+    model.compile(optimizer="adadelta", loss='mse')
     return model
 
 
@@ -78,17 +78,17 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v21/model-200eps')
+            '/content/gdrive/My Drive/models/v20/model-200eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(9000, activation='exponential')(input_img)
-        encoded = Dense(8000, activation='exponential')(encoded)
+        encoded = Dense(9000, activation='relu')(input_img)
+        encoded = Dense(8000, activation='relu')(encoded)
 
-        encoded = Dense(6000, activation='exponential')(encoded)
+        encoded = Dense(6000, activation='relu')(encoded)
 
-        decoded = Dense(8000, activation='exponential')(encoded)
-        decoded = Dense(9000, activation='exponential')(decoded)
+        decoded = Dense(8000, activation='relu')(encoded)
+        decoded = Dense(9000, activation='relu')(decoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
@@ -127,6 +127,6 @@ if __name__ == "__main__":
         del(data)
 
         if epochs % 50 == 0:
-            name = '/v21/model-'+str(epochs)+'eps'
+            name = '/v20/model-'+str(epochs)+'eps'
             save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
             create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
