@@ -12,6 +12,7 @@ from tensorflow.contrib import ffmpeg
 import numpy as np
 from autoencoder import compile_model, load_model
 import matplotlib.pyplot as plt
+from preprocces import normalize
 
 autoencoder = load_model('models/model-100eps')
 
@@ -42,6 +43,8 @@ for f in file_arr:
     a0 = rfft(audio[:, 0])
     a1 = rfft(audio[:, 1])
 
+    a0, max1 = normalize(a0)
+    a1, max2 = normalize(a1)
 
     s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
     s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
@@ -61,21 +64,23 @@ for f in file_arr:
             continue
 
         merged = np.hstack((norm1, norm2))
-        plt.plot(merged)
-        plt.show()
+        # plt.plot(merged)
+        # plt.show()
         merged = np.reshape(merged, (1,12348))
-        predicted = autoencoder.predict(merged)
-        # predicted = merged
+        # predicted = autoencoder.predict(merged)
+        predicted = merged
         
         splitted = np.hsplit(predicted[0], 2)
-        plt.plot(predicted[0])
-        plt.show()
+        # plt.plot(predicted[0])
+        # plt.show()
         channel1 = splitted[0]
         channel2 = splitted[1]
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
+    ch1_song = ch1_song * max1
+    ch2_song = ch2_song * max2
     ch1_song = irfft(ch1_song)
     ch2_song = irfft(ch2_song)
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)

@@ -14,6 +14,24 @@ DATA_FILES_WAV = 'audio_wav'
 PREPROCESSED_DATA = 'preprocessed'
 SECTION_SIZE = 12348 // 2
 
+def normalize(v):
+    mean = np.mean(v, axis=0)
+    sd = np.std(v, axis=0)
+    for i in range(0, len(v)):
+        z_score = (v[i] - mean)/sd 
+        if np.abs(z_score) > 3:
+            v[i] = mean
+    max =  np.amax(v)
+    audio = v / max
+
+    # audio = scalerX.transform(v[:, np.newaxis]).flatten()
+
+    return audio, max
+
+
+def unnormalize(v, scaler):
+    return scaler.inverse_transform(v[:, np.newaxis]).flatten()
+
 
 def preprocess_data(batch_size):
     i = 0
@@ -46,6 +64,9 @@ def preprocess_data(batch_size):
         
         a0 = rfft(audio[:, 0])
         a1 = rfft(audio[:, 1])
+
+        a0, scaler = normalize(a0)
+        a1, scaler = normalize(a1)
 
         s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
         s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
