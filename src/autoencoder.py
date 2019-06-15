@@ -12,6 +12,7 @@ import gc
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
+
 def compile_model(model):
     model.compile(optimizer=tf.train.AdamOptimizer(0.001), loss='mse')
     return model
@@ -85,8 +86,12 @@ if __name__ == "__main__":
         # encoded = Dense(6000, activation='relu')(encoded)
 
         # decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(15000, activation=tf.keras.layers.ELU, kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(input_img)
-        decoded = Dense(12348, activation=tf.keras.layers.ELU, kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(decoded)
+        decoded = Dense(15000, activation=tf.keras.layers.ELU,
+                        kernel_initializer=keras.initializers.VarianceScaling(),
+                        kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(input_img)
+        decoded = Dense(12348, activation=tf.keras.layers.ELU,
+                        kernel_initializer=keras.initializers.VarianceScaling(),
+                        kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
@@ -106,9 +111,9 @@ if __name__ == "__main__":
         plt.plot(data[10])
         plt.show()
         del(wav_arr_ch1, wav_arr_ch2)
-        
+
         initial_epoch = 0
-        epochs = 1 
+        epochs = 1
         epochs = (i+1)*epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
@@ -122,7 +127,6 @@ if __name__ == "__main__":
         scores.append(score)
         print('Test loss:', score)
         del(data)
-
 
         if epochs % 50 == 0:
             name = '/v19/model-'+str(epochs)+'eps'
