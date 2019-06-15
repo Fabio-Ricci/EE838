@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense, Flatten
+from tensorflow.keras.layers import Input, Dense
 import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
@@ -81,14 +81,15 @@ if __name__ == "__main__":
             '/content/gdrive/My Drive/models/v18/model-200eps')
         print("model loaded succesfully")
     else:
-        input_img = Input(shape=(1, 12348))
+        input_img = Input(shape=(12348,))
         # encoded = Dense(8000, activation='relu')(input_img)
         # encoded = Dense(6000, activation='relu')(encoded)
 
         # decoded = Dense(8000, activation='relu')(encoded)
-        encoded = Flatten(Input)
-        decoded = Dense(15000, activation=tf.keras.layers.ELU)(encoded)
-        decoded = Dense(12348, activation=tf.keras.layers.ELU,
+        decoded = Dense(15000, activation=tf.keras.layers.ELU(),
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(input_img)
+        decoded = Dense(12348, activation=tf.keras.layers.ELU(),
                         kernel_initializer=tf.keras.initializers.VarianceScaling(),
                         kernel_regularizer=tf.keras.regularizers.l2(0.0001))(decoded)
 
@@ -102,7 +103,7 @@ if __name__ == "__main__":
     scores = []
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
         gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = pregprocess_data(50)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
