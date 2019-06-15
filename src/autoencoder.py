@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
         decoded = Dense(8000, activation='relu',
                         kernel_initializer=tf.keras.initializers.VarianceScaling(),
-                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(encoded),
+                        kernel_regularizer=tf.keras.regularizers.l2(0.0001))(encoded)
         decoded = Dense(9000, activation='relu',
                         kernel_initializer=tf.keras.initializers.VarianceScaling(),
                         kernel_regularizer=tf.keras.regularizers.l2(0.0001))(decoded)
