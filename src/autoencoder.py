@@ -87,11 +87,11 @@ if __name__ == "__main__":
 
         # decoded = Dense(8000, activation='relu')(encoded)
         decoded = Dense(15000, activation=tf.keras.layers.ELU,
-                        kernel_initializer=keras.initializers.VarianceScaling(),
-                        kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(input_img)
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(input_img)
         decoded = Dense(12348, activation=tf.keras.layers.ELU,
-                        kernel_initializer=keras.initializers.VarianceScaling(),
-                        kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(decoded)
+                        kernel_initializer=tf.keras.initializers.VarianceScaling(),
+                        kernel_regularizer=tf.keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)
