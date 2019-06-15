@@ -85,8 +85,8 @@ if __name__ == "__main__":
         # encoded = Dense(6000, activation='relu')(encoded)
 
         # decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(15000, activation=tf.nn.elu)(input_img)
-        decoded = Dense(12348, activation=tf.nn.elu)(decoded)
+        decoded = Dense(15000, activation=tf.keras.layers.ELU, kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(input_img)
+        decoded = Dense(12348, activation=tf.keras.layers.ELU, kernel_regularizer=keras.regularizers.l1_l2(l1=0.0001, l2=0.0001))(decoded)
 
         autoencoder = Model(input_img, decoded)
         autoencoder = compile_model(autoencoder)

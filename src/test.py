@@ -11,10 +11,9 @@ from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav, encode
 from tensorflow.contrib import ffmpeg
 import numpy as np
 from autoencoder import compile_model, load_model
-from preprocces import normalize, unnormalize
 import matplotlib.pyplot as plt
 
-autoencoder = load_model('models/model-2000eps')
+autoencoder = load_model('models/model-50eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -33,36 +32,31 @@ for f in file_arr:
         [wav_decoder.sample_rate,
          wav_decoder.audio])
     audio = np.array(audio)
-    # We want to ensure that every song we look at has the same
-    # number of samples!
-    audios = [audio[i * section_size:(i + 1) * section_size]
-                                          for i in range((len(audio) + section_size - 1) // section_size)]
+    audio = np.array(audio)
+    audio = audio[:5280000]
+    if len(audio[:, 0]) != 5280000:
+        continue
+    print(len(audio[:, 0]))
+    print(audio.shape)
+
+    a0 = rfft(audio[:, 0])
+    a1 = rfft(audio[:, 1])
+
+
+    s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+    s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+
     i = 0
 
     song_wav_arr_ch1 = np.array([])
     song_wav_arr_ch2 = np.array([])
-    for a in audios:
-        i += 1
-        if (i == 500):
-            break
-        rfft0 = rfft(a[:, 0])
-        rfft1 = rfft(a[:, 1])
-        song_wav_arr_ch1 = np.concatenate([song_wav_arr_ch1, rfft0])
-        song_wav_arr_ch2 = np.concatenate([song_wav_arr_ch2, rfft1])
-        print(len(song_wav_arr_ch1))
-    normalized1, scaler0 = normalize(song_wav_arr_ch1)
-    normalized2, scaler1 = normalize(song_wav_arr_ch1)
 
     print("normalized")
     i = 0
-    for norm1, norm2 in zip(normalized1, normalized2):
-        print(i)
-        print(norm1)
-        if i == 500:
-            break
+    for norm1, norm2 in zip(s_a0, s_a1):
         i += 1
         if len(norm1) != section_size:
-            print(len(a[:, 0]))
+            print(len(norm1))
             print("wrong sample")
             continue
 
@@ -70,20 +64,20 @@ for f in file_arr:
         # plt.plot(merged)
         # plt.show()
         merged = np.reshape(merged, (1,12348))
-
         predicted = autoencoder.predict(merged)
         # predicted = merged
         
         splitted = np.hsplit(predicted[0], 2)
         # plt.plot(predicted[0])
         # plt.show()
-        channel1 = irfft(unnormalize(splitted[0], scaler0))
-        channel2 = irfft(unnormalize(splitted[1], scaler1))
+        channel1 = splitted[0]
+        channel2 = splitted[1]
         print(ch1_song.shape)
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
-
+    ch1_song = irfft(ch1_song)
+    ch2_song = irfft(ch2_song)
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)
     cols = 2
     rows = math.floor(len(audio_arr)/2)
