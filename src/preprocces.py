@@ -15,18 +15,19 @@ PREPROCESSED_DATA = 'preprocessed'
 SECTION_SIZE = 12348 // 2
 
 def normalize(v):
-    mean = np.mean(v, axis=0)
-    sd = np.std(v, axis=0)
-    for i in range(0, len(v)):
-        z_score = (v[i] - mean)/sd 
-        if np.abs(z_score) > 3:
-            v[i] = mean
-    max =  np.amax(v)
-    audio = v / max
+    # mean = np.mean(v, axis=0)
+    # sd = np.std(v, axis=0)
+    # for i in range(0, len(v)):
+    #     z_score = (v[i] - mean)/sd 
+    #     if np.abs(z_score) > 3:
+    #         v[i] = mean
+    m =  max(np.amax(v), abs(np.amin(v)))
+    m = (m + 1) / 2
+    audio = v / m
 
     # audio = scalerX.transform(v[:, np.newaxis]).flatten()
 
-    return audio, max
+    return audio, m
 
 
 def unnormalize(v, scaler):
