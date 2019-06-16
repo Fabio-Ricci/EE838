@@ -65,7 +65,7 @@ def preprocess_data(batch_size):
         a1, scaler = normalize(a1)
 
         s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
-        s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+        s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
 
         for a in zip(s_a0, s_a1):
             if len(a[0]) != section_size:

@@ -14,7 +14,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('models/model-550eps')
+autoencoder = load_model('models/model-700eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -48,8 +48,8 @@ for f in file_arr:
 
     s_a0 = [a0[i * section_size:(i + 1) * section_size]
             for i in range((len(a0) + section_size - 1) // section_size)]
-    s_a1 = [a0[i * section_size:(i + 1) * section_size]
-            for i in range((len(a0) + section_size - 1) // section_size)]
+    s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
+
 
     i = 0
 
