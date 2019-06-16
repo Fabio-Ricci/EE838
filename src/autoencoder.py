@@ -84,7 +84,7 @@ if __name__ == "__main__":
         input_img = Input(shape=(12348,))
         encoded = Dense(9000, activation='relu')(input_img)
 
-        encoded = Dense(6000, activation='sigmoid')(encoded)
+        encoded = Dense(6000, activation='relu')(encoded)
 
         decoded = Dense(9000, activation='relu')(encoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
