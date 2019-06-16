@@ -74,11 +74,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = False
+    load = True
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v20/model-200eps')
+            '/content/gdrive/My Drive/models/v20/model-100eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         plt.show()
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 0
+        initial_epoch = 100
         num_epochs = 10
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
