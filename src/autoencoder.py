@@ -74,18 +74,18 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v20/model-100eps')
+            '/content/gdrive/My Drive/models/v21/model-100eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(9000, activation='relu')(input_img)
         encoded = Dense(8000, activation='relu')(encoded)
 
-        encoded = Dense(6000, activation='relu')(encoded)
+        encoded = Dense(6000, activation='sigmoid')(encoded)
 
         decoded = Dense(8000, activation='relu')(encoded)
         decoded = Dense(9000, activation='relu')(decoded)
@@ -99,19 +99,21 @@ if __name__ == "__main__":
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
     scores = []
+    gc.collect()
+    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(60)
+    wav_arr_ch1 = np.array(wav_arr_ch1)
+    wav_arr_ch2 = np.array(wav_arr_ch2)
+
+    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+    plt.plot(data[10])
+    plt.show()
+    del(wav_arr_ch1, wav_arr_ch2)
+
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
-        gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
-        wav_arr_ch1 = np.array(wav_arr_ch1)
-        wav_arr_ch2 = np.array(wav_arr_ch2)
 
-        data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-        plt.plot(data[10])
-        plt.show()
-        del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 100
-        num_epochs = 10
+        initial_epoch = 0
+        num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
@@ -124,9 +126,7 @@ if __name__ == "__main__":
         score = autoencoder.evaluate(data, data, verbose=0)
         scores.append(score)
         print('Test loss:', score)
-        del(data)
 
-        if epochs % 50 == 0:
-            name = '/v20/model-'+str(epochs)+'eps'
-            save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
-            create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
+        name = '/v21/model-'+str(epochs)+'eps'
+        save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
+        create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)

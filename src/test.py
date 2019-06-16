@@ -1,18 +1,18 @@
+from preprocces import normalize
+import matplotlib.pyplot as plt
+from autoencoder import compile_model, load_model
+import numpy as np
+from tensorflow.contrib import ffmpeg
+from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav, encode_wav
+from glob import iglob
+import tensorflow as tf
+from scipy.fftpack import rfft, irfft
+from tensorflow.keras.models import model_from_json
+import math
 import os
 
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-import math
-from tensorflow.keras.models import model_from_json
-from scipy.fftpack import rfft, irfft
-import tensorflow as tf
-from glob import iglob
-from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav, encode_wav
-from tensorflow.contrib import ffmpeg
-import numpy as np
-from autoencoder import compile_model, load_model
-import matplotlib.pyplot as plt
-from preprocces import normalize
 
 autoencoder = load_model('models/model-100eps')
 
@@ -46,8 +46,10 @@ for f in file_arr:
     a0, max1 = normalize(a0)
     a1, max2 = normalize(a1)
 
-    s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
-    s_a1 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+    s_a0 = [a0[i * section_size:(i + 1) * section_size]
+            for i in range((len(a0) + section_size - 1) // section_size)]
+    s_a1 = [a0[i * section_size:(i + 1) * section_size]
+            for i in range((len(a0) + section_size - 1) // section_size)]
 
     i = 0
 
@@ -66,10 +68,10 @@ for f in file_arr:
         merged = np.hstack((norm1, norm2))
         # plt.plot(merged)
         # plt.show()
-        merged = np.reshape(merged, (1,12348))
+        merged = np.reshape(merged, (1, 12348))
         predicted = autoencoder.predict(merged)
         # predicted = merged
-        
+
         splitted = np.hsplit(predicted[0], 2)
         # plt.plot(predicted[0])
         # plt.show()
@@ -79,19 +81,17 @@ for f in file_arr:
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
-    ch1_song = ((ch1_song - 1) * 2) * max1 / 10
-    ch2_song = ((ch2_song - 1) * 2) * max2 / 10
+    ch1_song = ((ch1_song * 2)-1) * max1
+    ch2_song = ((ch2_song * 2)-1) * max2
     ch1_song = irfft(ch1_song)
     ch2_song = irfft(ch2_song)
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)
     cols = 2
     rows = math.floor(len(audio_arr)/2)
     audio_arr = audio_arr.reshape(rows, cols)
-   
-
 
     wav_encoder = ffmpeg.encode_audio(
-		audio_arr, file_format='wav', samples_per_second=sample_rate)
+        audio_arr, file_format='wav', samples_per_second=sample_rate)
 
     wav_file = sess.run(wav_encoder)
     open('test_reconstructed/' + str(file_number) + ".wav", 'wb').write(wav_file)
