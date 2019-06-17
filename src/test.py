@@ -14,7 +14,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('models/model-700eps')
+autoencoder = load_model('models/model-800eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -50,7 +50,21 @@ for f in file_arr:
             for i in range((len(a0) + section_size - 1) // section_size)]
     s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
 
+    wav_arr_ch1 = []
+    wav_arr_ch2 = []
 
+    for a in zip(s_a0, s_a1):
+            if len(a[0]) != section_size:
+                print(len(a[0]))
+                print("wrong sample")
+                continue
+            wav_arr_ch1.append(a[0])
+            wav_arr_ch2.append(a[1])
+
+    wav_arr_ch1 = np.array(wav_arr_ch1)
+    wav_arr_ch2 = np.array(wav_arr_ch2)
+
+    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
     i = 0
 
     song_wav_arr_ch1 = np.array([])
@@ -58,23 +72,26 @@ for f in file_arr:
 
     print("normalized")
     i = 0
-    for norm1, norm2 in zip(s_a0, s_a1):
+    for d in data:
         i += 1
-        if len(norm1) != section_size:
-            print(len(norm1))
+        if len(d) != section_size * 2:
+            print(len(d))
             print("wrong sample")
             continue
 
-        merged = np.hstack((norm1, norm2))
-        # plt.plot(merged)
+        # plt.plot(d)
         # plt.show()
-        merged = np.reshape(merged, (1, 12348))
+        
+        merged = np.reshape(d, (1, 12348))
         predicted = autoencoder.predict(merged)
         # predicted = merged
-
-        splitted = np.hsplit(predicted[0], 2)
+        
         # plt.plot(predicted[0])
         # plt.show()
+        
+        splitted = np.hsplit(predicted[0], 2)
+        
+        
         channel1 = splitted[0]
         channel2 = splitted[1]
         print(ch1_song.shape)
