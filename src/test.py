@@ -79,15 +79,15 @@ for f in file_arr:
             print("wrong sample")
             continue
 
-        # plt.plot(d)
-        # plt.show()
+        plt.plot(d)
+        plt.show()
         
         merged = np.reshape(d, (1, 12348))
         predicted = autoencoder.predict(merged)
         # predicted = merged
         
-        # plt.plot(predicted[0])
-        # plt.show()
+        plt.plot(predicted[0])
+        plt.show()
         
         splitted = np.hsplit(predicted[0], 2)
         

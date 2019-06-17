@@ -120,7 +120,7 @@ if __name__ == "__main__":
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  batch_size=128,
+                                  batch_size=256,
                                   initial_epoch=epochs - num_epochs)
 
         score = autoencoder.evaluate(data, data, verbose=0)
