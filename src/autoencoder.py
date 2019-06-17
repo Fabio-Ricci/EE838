@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v21/model-8000eps')
+            '/content/gdrive/My Drive/models/v21/model-800eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
