@@ -58,8 +58,8 @@ def preprocess_data(batch_size):
         # number of samples!
         section_size = 12348 // 2
         
-        a0 = rfft(audio[:, 0])
-        a1 = rfft(audio[:, 1])
+        a0 = audio[:, 0]
+        a1 = audio[:, 1]
 
         a0, scaler = normalize(a0)
         a1, scaler = normalize(a1)

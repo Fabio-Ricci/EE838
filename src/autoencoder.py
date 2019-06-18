@@ -14,7 +14,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def compile_model(model):
-    model.compile(optimizer="adadelta", loss='mse')
+    model.compile(optimizer="adam", loss='mse')
     return model
 
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
@@ -82,13 +82,13 @@ if __name__ == "__main__":
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
-        encoded = Dense(9000, activation='relu')(input_img)
-        encoded = Dense(8000, activation='relu')(encoded)
+        encoded = Dense(8400, activation='relu')(input_img)
+        encoded = Dense(3440, activation='relu')(encoded)
 
-        encoded = Dense(6000, activation='relu')(encoded)
+        encoded = Dense(2800, activation='relu')(encoded)
 
-        decoded = Dense(8000, activation='relu')(encoded)
-        decoded = Dense(9000, activation='relu')(decoded)
+        decoded = Dense(3440, activation='relu')(encoded)
+        decoded = Dense(8400, activation='relu')(decoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
@@ -105,14 +105,12 @@ if __name__ == "__main__":
     wav_arr_ch2 = np.array(wav_arr_ch2)
 
     data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-    plt.plot(data[10])
-    plt.show()
     del(wav_arr_ch1, wav_arr_ch2)
 
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
 
 
-        initial_epoch = 1150
+        initial_epoch = 0
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
@@ -120,13 +118,13 @@ if __name__ == "__main__":
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  batch_size=256,
+                                  batch_size=128,
                                   initial_epoch=epochs - num_epochs)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         scores.append(score)
         print('Test loss:', score)
 
-        name = '/v21/model-'+str(epochs)+'eps'
+        name = '/v22/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
