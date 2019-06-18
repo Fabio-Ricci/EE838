@@ -14,7 +14,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def compile_model(model):
-    model.compile(optimizer="adam", loss='mse')
+    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='mse')
     return model
 
 
