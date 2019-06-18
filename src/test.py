@@ -14,7 +14,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('models/model-800eps')
+autoencoder = load_model('models/model-100eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
@@ -40,8 +40,8 @@ for f in file_arr:
     print(len(audio[:, 0]))
     print(audio.shape)
 
-    a0 = rfft(audio[:, 0])
-    a1 = rfft(audio[:, 1])
+    a0 = audio[:, 0]
+    a1 = audio[:, 1]
 
     a0, max1 = normalize(a0)
     a1, max2 = normalize(a1)
@@ -79,15 +79,15 @@ for f in file_arr:
             print("wrong sample")
             continue
 
-        plt.plot(d)
-        plt.show()
+        # plt.plot(d)
+        # plt.show()
         
         merged = np.reshape(d, (1, 12348))
         predicted = autoencoder.predict(merged)
         # predicted = merged
         
-        plt.plot(predicted[0])
-        plt.show()
+        # plt.plot(predicted[0])
+        # plt.show()
         
         splitted = np.hsplit(predicted[0], 2)
         
@@ -100,8 +100,8 @@ for f in file_arr:
         ch2_song = np.concatenate((ch2_song, channel2))
     ch1_song = ((ch1_song * 2)-1) * max1
     ch2_song = ((ch2_song * 2)-1) * max2
-    ch1_song = irfft(ch1_song)
-    ch2_song = irfft(ch2_song)
+    ch1_song = ch1_song
+    ch2_song = ch2_song
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)
     cols = 2
     rows = math.floor(len(audio_arr)/2)
