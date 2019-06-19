@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v22/model-1950eps')
+            '/content/gdrive/My Drive/models/v22/model-2200eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -99,18 +99,18 @@ if __name__ == "__main__":
     # checkpoint = ModelCheckpoint(filepath, verbose=1, mode='max', period=50)
     callbacks_list = []  # [checkpoint]
     scores = []
-    gc.collect()
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(60)
-    wav_arr_ch1 = np.array(wav_arr_ch1)
-    wav_arr_ch2 = np.array(wav_arr_ch2)
-
-    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-    del(wav_arr_ch1, wav_arr_ch2)
 
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
 
+        gc.collect()
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(60)
+        wav_arr_ch1 = np.array(wav_arr_ch1)
+        wav_arr_ch2 = np.array(wav_arr_ch2)
 
-        initial_epoch = 1950
+        data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+        del(wav_arr_ch1, wav_arr_ch2)
+
+        initial_epoch = 2200
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
