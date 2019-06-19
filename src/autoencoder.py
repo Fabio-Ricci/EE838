@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v22/model-800eps')
+            '/content/gdrive/My Drive/models/v22/model-1800eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
 
 
-        initial_epoch = 800
+        initial_epoch = 1800
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
