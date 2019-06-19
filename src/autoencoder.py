@@ -74,11 +74,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v22/model-2200eps')
+            '/content/gdrive/My Drive/models/v23/model-2200eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -125,6 +125,6 @@ if __name__ == "__main__":
         scores.append(score)
         print('Test loss:', score)
 
-        name = '/v22/model-'+str(epochs)+'eps'
+        name = '/v23/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
