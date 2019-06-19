@@ -74,11 +74,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = False
+    load = True
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v21/model-1150eps')
+            '/content/gdrive/My Drive/models/v22/model-800eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
 
 
-        initial_epoch = 0
+        initial_epoch = 800
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
