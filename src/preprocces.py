@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 import random
 
 
-DATA_FILES_WAV = 'audio_wav'
-PREPROCESSED_DATA = 'preprocessed'
+DATA_FILES_WAV = '/content/EE838/src/audio_wav'
 SECTION_SIZE = 12348 // 2
 
 def normalize(v):
