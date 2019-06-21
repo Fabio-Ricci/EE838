@@ -2,8 +2,8 @@ from pydub import AudioSegment
 from glob import iglob
 import os
 
-DATA_FILES_MP3 = 'audio'
-DATA_FILES_WAV = 'audio_wav'
+DATA_FILES_MP3 = '/content/gdrive/My Drive/songs'
+DATA_FILES_WAV = '/content/gdrive/My Drive/songs_wav'
 DATA_FILES_MP3_CONVERTED = 'songs_converted'
 
 

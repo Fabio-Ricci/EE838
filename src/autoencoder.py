@@ -74,11 +74,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v23/model-3750eps')
+            '/content/gdrive/My Drive/models/v24/model-3750eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 3750
+        initial_epoch = 0
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
@@ -125,6 +125,6 @@ if __name__ == "__main__":
         scores.append(score)
         print('Test loss:', score)
 
-        name = '/v23/model-'+str(epochs)+'eps'
+        name = '/v24/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
         create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
