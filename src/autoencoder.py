@@ -100,15 +100,17 @@ if __name__ == "__main__":
     callbacks_list = []  # [checkpoint]
     scores = []
 
+    gc.collect()
+    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(60)
+    wav_arr_ch1 = np.array(wav_arr_ch1)
+    wav_arr_ch2 = np.array(wav_arr_ch2)
+
+    data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+    del(wav_arr_ch1, wav_arr_ch2)
+
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
 
-        gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(60)
-        wav_arr_ch1 = np.array(wav_arr_ch1)
-        wav_arr_ch2 = np.array(wav_arr_ch2)
-
-        data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-        del(wav_arr_ch1, wav_arr_ch2)
+        
 
         initial_epoch = 0
         num_epochs = 50
@@ -116,9 +118,11 @@ if __name__ == "__main__":
         # Fit the model
         history = autoencoder.fit(data, data,
                                   epochs=epochs,
+                                  validation
                                   shuffle=True,
                                   callbacks=callbacks_list,
                                   batch_size=128,
+                                  validation_split=0.15,
                                   initial_epoch=epochs - num_epochs)
 
         score = autoencoder.evaluate(data, data, verbose=0)
