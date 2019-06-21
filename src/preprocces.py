@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import random
 
 
-DATA_FILES_WAV = '/content/gdrive/My Drive/songs_wav'
+DATA_FILES_WAV = '/content/gdrive/Team Drives/EE838/songs_wav'
 SECTION_SIZE = 12348 // 2
 
 def normalize(v):
