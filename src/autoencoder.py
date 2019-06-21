@@ -44,21 +44,22 @@ def save_model(model, name):
 
 
 # http://flothesof.github.io/convnet-face-keypoint-detection.html
-def create_graphs(scores, name=''):
+def create_graphs(history, name=''):
     # loss
     plt.figure()
-    plt.plot(scores)
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
     plt.title('model loss')
     plt.ylabel('loss')
     plt.xlabel('epoch')
-    plt.legend(['train'], loc='upper left')
+    plt.legend(['train', 'test'], loc='upper left')
     # plt.show()
     plt.tight_layout()
     if name == '':
         name = 'graphs/'+str(datetime.datetime.now())
     if not os.path.exists('/'.join(name.split('/')[:-1])):
         os.makedirs('/'.join(name.split('/')[:-1]))
-    plt.savefig(name+'-training-info.png')
+    plt.savefig(name+'-training-info.png
 
 
 if __name__ == "__main__":
@@ -74,11 +75,11 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = False
+    load = True
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v24/model-3750eps')
+            '/content/gdrive/My Drive/models/v24/model-50eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -101,7 +102,7 @@ if __name__ == "__main__":
     scores = []
 
     gc.collect()
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(40)
+    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(50)
     wav_arr_ch1 = np.array(wav_arr_ch1)
     wav_arr_ch2 = np.array(wav_arr_ch2)
 
@@ -112,7 +113,7 @@ if __name__ == "__main__":
 
         
 
-        initial_epoch = 0
+        initial_epoch = 50
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
@@ -130,4 +131,4 @@ if __name__ == "__main__":
 
         name = '/v24/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/My Drive/models'+name)
-        create_graphs(scores, '/content/gdrive/My Drive/graphs'+name)
+        create_graphs(history, '/content/gdrive/My Drive/graphs'+name)
