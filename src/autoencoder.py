@@ -101,7 +101,7 @@ if __name__ == "__main__":
     scores = []
 
     gc.collect()
-    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(60)
+    wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(40)
     wav_arr_ch1 = np.array(wav_arr_ch1)
     wav_arr_ch2 = np.array(wav_arr_ch2)
 
