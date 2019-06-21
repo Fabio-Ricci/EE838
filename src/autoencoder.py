@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/My Drive/models/v23/model-3150eps')
+            '/content/gdrive/My Drive/models/v23/model-3750eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 3150
+        initial_epoch = 3750
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
