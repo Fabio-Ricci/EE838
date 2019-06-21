@@ -59,7 +59,7 @@ def create_graphs(history, name=''):
         name = 'graphs/'+str(datetime.datetime.now())
     if not os.path.exists('/'.join(name.split('/')[:-1])):
         os.makedirs('/'.join(name.split('/')[:-1]))
-    plt.savefig(name+'-training-info.png
+    plt.savefig(name+'-training-info.png')
 
 
 if __name__ == "__main__":
