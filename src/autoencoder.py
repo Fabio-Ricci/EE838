@@ -79,16 +79,16 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/Team Drives/EE838/models/v24/model-150eps')
+            '/content/gdrive/Team Drives/EE838/models/v25/model-150eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu')(input_img)
-        encoded = Dense(3440, activation='relu')(encoded)
+        encoded = Dense(5000, activation='relu')(encoded)
 
-        encoded = Dense(2800, activation='relu')(encoded)
+        encoded = Dense(4000, activation='relu')(encoded)
 
-        decoded = Dense(3440, activation='relu')(encoded)
+        decoded = Dense(5000, activation='relu')(encoded)
         decoded = Dense(8400, activation='relu')(decoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
 
@@ -126,6 +126,6 @@ if __name__ == "__main__":
         scores.append(score)
         print('Test loss:', score)
 
-        name = '/v24/model-'+str(epochs)+'eps'
+        name = '/v25/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/Team Drives/EE838/models'+name)
         create_graphs(history, '/content/gdrive/Team Drives/EE838/graphs'+name)
