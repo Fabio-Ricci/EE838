@@ -14,7 +14,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('models/model-550eps')
+autoencoder = load_model('models/model-1000eps')
 
 file_arr = iglob('test/*.wav')
 sess = tf.Session()
