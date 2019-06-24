@@ -10,6 +10,7 @@ from scipy.fftpack import rfft, irfft
 from tensorflow.keras.models import model_from_json
 import math
 import os
+import time
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -114,3 +115,5 @@ for f in file_arr:
     open('/content/gdrive/Team Drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb').write(wav_file)
     file_number += 1
 print('all done')
+
+time.sleep(15)
