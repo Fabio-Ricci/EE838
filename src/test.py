@@ -35,9 +35,7 @@ for f in file_arr:
          wav_decoder.audio])
     audio = np.array(audio)
     audio = np.array(audio)
-    audio = audio[:5280000]
-    if len(audio[:, 0]) != 5280000:
-        continue
+    
     print(len(audio[:, 0]))
     print(audio.shape)
 
