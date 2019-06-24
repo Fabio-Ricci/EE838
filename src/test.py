@@ -14,9 +14,9 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('models/model-1000eps')
+autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v25/models/model-1250eps')
 
-file_arr = iglob('test/*.wav')
+file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
@@ -111,5 +111,5 @@ for f in file_arr:
         audio_arr, file_format='wav', samples_per_second=sample_rate)
 
     wav_file = sess.run(wav_encoder)
-    open('test_reconstructed/' + str(file_number) + ".wav", 'wb').write(wav_file)
+    open('/content/gdrive/Team Drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb').write(wav_file)
     file_number += 1
