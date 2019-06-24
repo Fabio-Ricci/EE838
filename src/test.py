@@ -112,7 +112,8 @@ for f in file_arr:
         audio_arr, file_format='wav', samples_per_second=sample_rate)
 
     wav_file = sess.run(wav_encoder)
-    f = open('/content/gdrive/Team Drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb').write(wav_file)
+    f = open('/content/gdrive/Team Drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb')
+    f.write(wav_file)
     f.close()
     file_number += 1
 print('all done')
