@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/Team Drives/EE838/models/v25/model-1600eps')
+            '/content/gdrive/Team Drives/EE838/models/v25/model-1602eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -103,14 +103,14 @@ if __name__ == "__main__":
 
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
         gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(40)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(15)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 1600
+        initial_epoch = 1602
         num_epochs = 2
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
