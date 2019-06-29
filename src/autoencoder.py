@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense, GRU, Conv1D, MaxPooling1D, Flatten
+from tensorflow.keras.layers import Input, Dense
 import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
@@ -82,10 +82,9 @@ if __name__ == "__main__":
             '/content/gdrive/Team Drives/EE838/models/v26/model-1602eps')
         print("model loaded succesfully")
     else:
-        input_img = Input(shape=(12348,1))
-        encoded = Conv1D(64, (5), activation='relu')(input_img)
-        encoded = MaxPooling1D(pool_size=4)(encoded)
-        encoded = Flatten()(encoded)
+        input_img = Input(shape=(12348,))
+        encoded = Dense(8400, activation='relu')(input_img)
+        encoded = Dense(6000, activation='relu')(encoded)
         encoded = Dense(5000, activation='relu')(encoded)
 
         encoded = Dense(4000, activation='relu')(encoded)
@@ -110,11 +109,10 @@ if __name__ == "__main__":
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
-        data = data.reshape(len(data), 12348)
         del(wav_arr_ch1, wav_arr_ch2)
 
         initial_epoch = 0
-        num_epochs = 50
+        num_epochs = 2
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
