@@ -1,4 +1,4 @@
-from preprocces import normalize
+from preprocces import normalize, segment
 import matplotlib.pyplot as plt
 from autoencoder import compile_model, load_model
 import numpy as np
@@ -21,6 +21,7 @@ file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
+OVERLAP_SEGMENTS = False
 
 file_number = 0
 for f in file_arr:
@@ -45,9 +46,14 @@ for f in file_arr:
     a0 = normalize(a0)
     a1 = normalize(a1)
 
-    s_a0 = [a0[i * section_size:(i + 1) * section_size]
-            for i in range((len(a0) + section_size - 1) // section_size)]
-    s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
+    overlap_size = 98 # ~1.6% of section_size
+    if OVERLAP_SEGMENTS:
+        s_a0 = segment(a0, overlap_size, section_size)
+        s_a1 = segment(a1, overlap_size, section_size)
+        # FIXME AE output transformation into audio
+    else:
+        s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size)]
+        s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size)] 
 
     wav_arr_ch1 = []
     wav_arr_ch2 = []
