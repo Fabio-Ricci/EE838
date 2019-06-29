@@ -83,7 +83,7 @@ if __name__ == "__main__":
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,1))
-        encoded = Conv1D(8400, (40), activation='relu')(input_img)
+        encoded = Conv1D(128, (16), activation='relu')(input_img)
         encoded = MaxPooling1D(pool_size=4)(encoded)
         encoded = Flatten()(encoded)
         encoded = Dense(5000, activation='relu')(encoded)
