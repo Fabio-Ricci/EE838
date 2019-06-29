@@ -110,6 +110,7 @@ if __name__ == "__main__":
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
+        data = data.reshape(len(data), 12348, 1)
         del(wav_arr_ch1, wav_arr_ch2)
 
         initial_epoch = 0
