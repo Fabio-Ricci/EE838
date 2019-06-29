@@ -85,14 +85,12 @@ if __name__ == "__main__":
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu')(input_img)
         encoded = Dense(5000, activation='relu')(encoded)
-        encoded = Conv1D(4000, 32, activation='relu')(encoded)
         encoded = GRU(4000, dropout=0.1, recurrent_dropout=0.1, activation='relu')(encoded)
 
         encoded = Dense(4000, activation='relu')(encoded)
 
         decoded = Dense(5000, activation='relu')(encoded)
-        # decoded = Dense(8400, activation='relu')(decoded)
-        decoded = Conv1D(8400, 40, activation='relu')(decoded)
+        decoded = Dense(8400, activation='relu')(decoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
