@@ -84,6 +84,7 @@ if __name__ == "__main__":
     else:
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu')(input_img)
+        encoded = Dense(6000, activation='relu')(encoded)
         encoded = Dense(5000, activation='relu')(encoded)
 
         encoded = Dense(4000, activation='relu')(encoded)
@@ -126,6 +127,6 @@ if __name__ == "__main__":
         scores.append(score)
         print('Test loss:', score)
 
-        name = '/v27/model-'+str(epochs)+'eps' # NOTE v27 uses overlapping segments
+        name = '/v26/model-'+str(epochs)+'eps'
         save_model(autoencoder, '/content/gdrive/Team Drives/EE838/models'+name)
         create_graphs(history, '/content/gdrive/Team Drives/EE838/graphs'+name)
