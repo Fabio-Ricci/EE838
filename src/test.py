@@ -42,8 +42,8 @@ for f in file_arr:
     a0 = audio[:, 0]
     a1 = audio[:, 1]
 
-    a0, max1 = normalize(a0)
-    a1, max2 = normalize(a1)
+    a0 = normalize(a0)
+    a1 = normalize(a1)
 
     s_a0 = [a0[i * section_size:(i + 1) * section_size]
             for i in range((len(a0) + section_size - 1) // section_size)]
@@ -97,8 +97,8 @@ for f in file_arr:
         print(ch2_song.shape)
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
-    ch1_song = ((ch1_song * 2)-1) * max1
-    ch2_song = ((ch2_song * 2)-1) * max2
+    ch1_song = ((ch1_song * 2)-1)
+    ch2_song = ((ch2_song * 2)-1)
     ch1_song = ch1_song
     ch2_song = ch2_song
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)

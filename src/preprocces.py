@@ -20,12 +20,10 @@ def normalize(v):
     #     z_score = (v[i] - mean)/sd 
     #     if np.abs(z_score) > 3:
     #         v[i] = mean
-    m =  max(np.amax(v), abs(np.amin(v)))
-    audio = v / m
     audio = (audio + 1) / 2
     # audio = scalerX.transform(v[:, np.newaxis]).flatten()
 
-    return audio, m
+    return audios
 
 
 def preprocess_data(batch_size):
@@ -60,8 +58,8 @@ def preprocess_data(batch_size):
         a0 = audio[:, 0]
         a1 = audio[:, 1]
 
-        a0, scaler = normalize(a0)
-        a1, scaler = normalize(a1)
+        a0 = normalize(a0)
+        a1 = normalize(a1)
 
         s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
         s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
