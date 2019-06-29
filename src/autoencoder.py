@@ -82,10 +82,11 @@ if __name__ == "__main__":
             '/content/gdrive/Team Drives/EE838/models/v26/model-1602eps')
         print("model loaded succesfully")
     else:
-        input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='relu')(input_img)
+        input_img = Input(shape=(12348,1))
+        encoded = Conv1D(8400, (40), activation='relu')(input_img)
+        encoded = MaxPooling1D(pool_size=4)(encoded)
+        encoded = Flatten()(encoded)
         encoded = Dense(5000, activation='relu')(encoded)
-        encoded = GRU(4000, dropout=0.1, recurrent_dropout=0.1, activation='relu')(encoded)
 
         encoded = Dense(4000, activation='relu')(encoded)
 
