@@ -20,7 +20,7 @@ def normalize(v):
     #     z_score = (v[i] - mean)/sd 
     #     if np.abs(z_score) > 3:
     #         v[i] = mean
-    audio = (audio + 1) / 2
+    audio = (v + 1) / 2
     # audio = scalerX.transform(v[:, np.newaxis]).flatten()
 
     return audios
