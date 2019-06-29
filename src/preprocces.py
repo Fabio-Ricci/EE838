@@ -23,7 +23,7 @@ def normalize(v):
     audio = (v + 1) / 2
     # audio = scalerX.transform(v[:, np.newaxis]).flatten()
 
-    return audios
+    return audio
 
 
 def preprocess_data(batch_size):
