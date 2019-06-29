@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense, GRU, Conv1D
+from tensorflow.keras.layers import Input, Dense, GRU, Conv1D, MaxPooling1D, Flatten
 import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
