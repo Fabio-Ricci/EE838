@@ -26,20 +26,11 @@ def normalize(v):
 
     return audio
 
-
-def segment(sequence, overlap_size, seg_size):
+def segment(sequence, seg_size, overlap_size=0):
     delta = seg_size - overlap_size
+    # n = (len(sequence) - overlap_size) / delta
+    # print(f"s-o={delta}, n={n:.2f}, floor={math.floor(n)}, ceil={math.ceil(n)}")
     return [sequence[d : d + seg_size] for d in range(0, len(sequence) - seg_size + 1, delta)]
-
-def add_overlap(segmented, overlap_size, add_type=-1):
-    if add_type < 0:
-        func = lambda acc, x: acc + x[overlap_size:] # ignores head overlap
-    elif add_type == 0:
-        func = lambda acc, x: acc[:-overlap_size] + [sum(x) / 2 for x in zip(acc[-overlap_size:], x[:overlap_size+1])] + x[overlap_size:] # averages overlaps
-    else:
-        func = lambda acc, x: acc[:-overlap_size] + x # ignores tail overlap
-    return reduce(func, segmented)
-
 
 def preprocess_data(batch_size):
     i = 0
@@ -79,8 +70,8 @@ def preprocess_data(batch_size):
         overlap_size = 98 # ~1.6% of section_size
 
         if OVERLAP_SEGMENTS:
-            s_a0 = segment(a0, overlap_size, section_size)
-            s_a1 = segment(a1, overlap_size, section_size)
+            s_a0 = segment(a0, section_size, overlap_size)
+            s_a1 = segment(a1, section_size, overlap_size)
         else:
             s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
             s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
