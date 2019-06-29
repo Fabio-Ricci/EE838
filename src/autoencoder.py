@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import datetime
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense
+from tensorflow.keras.layers import Input, Dense, GRU, Conv1D
 import tensorflow as tf
 import numpy as np
 from preprocces import preprocess_data
@@ -85,11 +85,14 @@ if __name__ == "__main__":
         input_img = Input(shape=(12348,))
         encoded = Dense(8400, activation='relu')(input_img)
         encoded = Dense(5000, activation='relu')(encoded)
+        encoded = Conv1D(4000, 32, activation='relu')(encoded)
+        encoded = GRU(4000, dropout=0.1, recurrent_dropout=0.1, activation='relu')(encoded)
 
         encoded = Dense(4000, activation='relu')(encoded)
 
         decoded = Dense(5000, activation='relu')(encoded)
-        decoded = Dense(8400, activation='relu')(decoded)
+        # decoded = Dense(8400, activation='relu')(decoded)
+        decoded = Conv1D(8400, 40, activation='relu')(decoded)
         decoded = Dense(12348, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
@@ -111,7 +114,7 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2)
 
         initial_epoch = 0
-        num_epochs = 2
+        num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
