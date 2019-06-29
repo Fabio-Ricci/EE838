@@ -12,7 +12,6 @@ import random
 
 DATA_FILES_WAV = '/content/gdrive/Team Drives/EE838/songs_wav'
 SECTION_SIZE = 12348 // 2
-OVERLAP_SEGMENTS = True
 
 def normalize(v):
     # mean = np.mean(v, axis=0)
@@ -26,15 +25,10 @@ def normalize(v):
 
     return audio
 
-def segment(sequence, seg_size, overlap_size=0):
-    delta = seg_size - overlap_size
-    # n = (len(sequence) - overlap_size) / delta
-    # print(f"s-o={delta}, n={n:.2f}, floor={math.floor(n)}, ceil={math.ceil(n)}")
-    return [sequence[d : d + seg_size] for d in range(0, len(sequence) - seg_size + 1, delta)]
 
 def preprocess_data(batch_size):
     i = 0
-    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))
+    file_arr = list(iglob(DATA_FILES_WAV + '/*.wav'))    
     np.random.shuffle(file_arr)
     sess = tf.Session()
 
@@ -67,14 +61,8 @@ def preprocess_data(batch_size):
         a0 = normalize(a0)
         a1 = normalize(a1)
 
-        overlap_size = 98 # ~1.6% of section_size
-
-        if OVERLAP_SEGMENTS:
-            s_a0 = segment(a0, section_size, overlap_size)
-            s_a1 = segment(a1, section_size, overlap_size)
-        else:
-            s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
-            s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
+        s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size )] 
+        s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size )] 
 
         for a in zip(s_a0, s_a1):
             if len(a[0]) != section_size:
