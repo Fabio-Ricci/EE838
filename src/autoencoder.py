@@ -75,7 +75,7 @@ if __name__ == "__main__":
     # this is the size of our encoded representations
     # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
     encoding_dim = 2800
-    load = True
+    load = False
 
     if load:
         autoencoder = load_model(
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 1350
+        initial_epoch = 0
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
