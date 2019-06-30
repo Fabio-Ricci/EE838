@@ -59,12 +59,12 @@ for f in file_arr:
     wav_arr_ch2 = []
 
     for a in zip(s_a0, s_a1):
-            if len(a[0]) != section_size:
-                print(len(a[0]))
-                print("wrong sample")
-                continue
-            wav_arr_ch1.append(a[0])
-            wav_arr_ch2.append(a[1])
+        if len(a[0]) != section_size:
+            print(len(a[0]))
+            print("wrong sample")
+            continue
+        wav_arr_ch1.append(a[0])
+        wav_arr_ch2.append(a[1])
 
     wav_arr_ch1 = np.array(wav_arr_ch1)
     wav_arr_ch2 = np.array(wav_arr_ch2)
@@ -101,12 +101,23 @@ for f in file_arr:
         channel2 = splitted[1]
         print(ch1_song.shape)
         print(ch2_song.shape)
-        ch1_song = np.concatenate((ch1_song, channel1))
-        ch2_song = np.concatenate((ch2_song, channel2))
+        if OVERLAP_SEGMENTS:
+            ch1_song = np.append((ch1_song, channel1)) # [[..], [..], ...]
+            ch2_song = np.append((ch2_song, channel2))    
+        else:
+            ch1_song = np.concatenate((ch1_song, channel1))  # [...]
+            ch2_song = np.concatenate((ch2_song, channel2))
+    
+    # maps sigmoid [0,1] output to [-1,1] for .wav
+    if OVERLAP_SEGMENTS:
+        ch1_song = add_overlap(ch1_song, overlap_size) # [[..], [..], ...] -> [...]
+        ch2_song = add_overlap(ch1_song, overlap_size)
+
     ch1_song = ((ch1_song * 2)-1)
     ch2_song = ((ch2_song * 2)-1)
-    ch1_song = ch1_song
-    ch2_song = ch2_song
+
+
+
     audio_arr = np.hstack(np.array((ch1_song, ch2_song)).T)
     cols = 2
     rows = math.floor(len(audio_arr)/2)
