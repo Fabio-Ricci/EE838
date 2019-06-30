@@ -107,7 +107,7 @@ for f in file_arr:
         ch1_song = [ch1_song[i : i+section_size] for i in range(0, len(ch1_song), section_size)] # [...] -> [[..], [..], ...]
         ch2_song = [ch2_song[i : i+section_size] for i in range(0, len(ch2_song), section_size)]
         ch1_song = add_overlap(ch1_song, overlap_size) # [[..], [..], ...] -> [...]
-        ch2_song = add_overlap(ch1_song, overlap_size)
+        ch2_song = add_overlap(ch2_song, overlap_size)
 
     # maps sigmoid [0,1] output to [-1,1] for .wav
     ch1_song = ((ch1_song * 2)-1)
