@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/Team Drives/EE838/models/v27/model-450eps')
+            '/content/gdrive/Team Drives/EE838/models/v27/model-700eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 450
+        initial_epoch = 700
         num_epochs = 50
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
