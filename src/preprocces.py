@@ -34,11 +34,11 @@ def segment(sequence, overlap_size, seg_size):
 
 def add_overlap(segmented, overlap_size, add_type=-1):
     if add_type < 0:
-        func = lambda acc, x: acc + x[overlap_size:] # ignores head overlap
+        func = lambda acc, x: np.concatenate((acc, x[overlap_size:])) # ignores head overlap
     elif add_type == 0:
-        func = lambda acc, x: acc[:-overlap_size] + [sum(x) / 2 for x in zip(acc[-overlap_size:], x[:overlap_size+1])] + x[overlap_size:] # averages overlaps
+        func = lambda acc, x: np.concatenate((acc[:-overlap_size], [sum(x) / 2 for x in zip(acc[-overlap_size:], x[:overlap_size+1])], x[overlap_size:])) # averages overlaps
     else:
-        func = lambda acc, x: acc[:-overlap_size] + x # ignores tail overlap
+        func = lambda acc, x: np.concatenate((acc[:-overlap_size], x)) # ignores tail overlap
     return reduce(func, segmented)
 
 
