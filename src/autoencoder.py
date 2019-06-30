@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     for i in range(30000):  # 100 epochs = 0.56h = 34 min
         gc.collect()
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(25)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(30)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
