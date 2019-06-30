@@ -1,4 +1,4 @@
-from preprocces import normalize, segment
+from preprocces import normalize, segment, add_overlap
 import matplotlib.pyplot as plt
 from autoencoder import compile_model, load_model
 import numpy as np

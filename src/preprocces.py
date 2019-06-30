@@ -8,6 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 import pickle
 import matplotlib.pyplot as plt
 import random
+from functools import reduce
 
 
 DATA_FILES_WAV = '/content/gdrive/Team Drives/EE838/songs_wav'
