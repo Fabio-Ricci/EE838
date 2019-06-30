@@ -77,7 +77,7 @@ def preprocess_data(batch_size):
         a0 = normalize(a0)
         a1 = normalize(a1)
 
-        overlap_size = 980 # ~1.6% of section_size
+        overlap_size = 1029 # ~1.6% of section_size
 
         if OVERLAP_SEGMENTS:
             s_a0 = segment(a0, overlap_size, section_size)
