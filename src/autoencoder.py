@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/Team Drives/EE838/models/v27/model-700eps')
+            '/content/gdrive/Team Drives/EE838/models/v27/model-2150eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -111,14 +111,14 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2)
 
         initial_epoch = 700
-        num_epochs = 50
+        num_epochs = 1
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
         history = autoencoder.fit(data, data,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  batch_size=128,
+                                  batch_size=64,
                                   validation_split=0.15,
                                   initial_epoch=epochs - num_epochs)
 

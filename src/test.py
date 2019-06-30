@@ -15,7 +15,7 @@ import time
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v27/model-450eps')
+autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v27/model-2150eps')
 
 file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
 sess = tf.Session()
