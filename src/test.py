@@ -96,7 +96,6 @@ for f in file_arr:
         
         splitted = np.hsplit(predicted[0], 2)
         
-        
         channel1 = splitted[0]
         channel2 = splitted[1]
         print(ch1_song.shape)
@@ -106,6 +105,8 @@ for f in file_arr:
     
     # maps sigmoid [0,1] output to [-1,1] for .wav
     if OVERLAP_SEGMENTS:
+        ch1_song = [ch1_song[i : i+section_size] for i in range(0, len(ch1_song), section_size)] # [...] -> [[..], [..], ...]
+        ch2_song = [ch2_song[i : i+section_size] for i in range(0, len(ch2_song), section_size)]
         ch1_song = add_overlap(ch1_song, overlap_size) # [[..], [..], ...] -> [...]
         ch2_song = add_overlap(ch1_song, overlap_size)
 
