@@ -110,7 +110,7 @@ if __name__ == "__main__":
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 700
+        initial_epoch = 2150
         num_epochs = 1
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
