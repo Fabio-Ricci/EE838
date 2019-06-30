@@ -15,13 +15,13 @@ import time
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v27/model-2150eps')
+autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v27/model-2165eps')
 
 file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
-OVERLAP_SEGMENTS = False
+OVERLAP_SEGMENTS = True
 
 file_number = 0
 for f in file_arr:
