@@ -21,7 +21,7 @@ file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
-OVERLAP_SEGMENTS = False
+OVERLAP_SEGMENTS = True
 
 file_number = 0
 for f in file_arr:
