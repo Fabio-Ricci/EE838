@@ -11,7 +11,7 @@ import random
 from functools import reduce
 
 
-DATA_FILES_WAV = '/content/gdrive/Team Drives/EE838/songs_wav'
+DATA_FILES_WAV = '/content/gdrive/Shared drives/EE838/songs_wav'
 SECTION_SIZE = 12348 // 2
 OVERLAP_SEGMENTS = True
 

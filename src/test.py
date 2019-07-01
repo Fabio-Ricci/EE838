@@ -15,9 +15,9 @@ import time
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v27/model-1650eps')
+autoencoder = load_model('/content/gdrive/Shared drives/EE838/models/v27/model-1650eps')
 
-file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
+file_arr = iglob('/content/gdrive/Shared drives/EE838/test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
@@ -46,7 +46,7 @@ for f in file_arr:
     a0 = normalize(a0)
     a1 = normalize(a1)
 
-    overlap_size = 98 # ~1.6% of section_size
+    overlap_size = 1029 # ~1.6% of section_size
     if OVERLAP_SEGMENTS:
         s_a0 = segment(a0, overlap_size, section_size)
         s_a1 = segment(a1, overlap_size, section_size)
@@ -122,7 +122,7 @@ for f in file_arr:
         audio_arr, file_format='wav', samples_per_second=sample_rate)
 
     wav_file = sess.run(wav_encoder)
-    f = open('/content/gdrive/Team Drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb')
+    f = open('/content/gdrive/Shared drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb')
     f.write(wav_file)
     f.close()
     file_number += 1
