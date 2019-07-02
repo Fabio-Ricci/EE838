@@ -41,6 +41,13 @@ autoencoder = load_model(full_path, lr=params.learning_rate)
 
 file_arr = iglob(params.wav_test_data_path_start + "*.wav")
 
+print("+--------------+")
+print(f"Params: {params}")
+print("+--------------+")
+for f in file_arr:
+    print(f"File: {f}")
+print("+--------------+")
+
 sess = tf.Session()
 
 file_number = 0
