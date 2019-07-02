@@ -44,7 +44,7 @@ file_arr = iglob(params.wav_test_data_path_start + "*.wav")
 print("+--------------+")
 print(f"Params: {params}")
 print("+--------------+")
-for f in file_arr:
+for f in iglob(params.wav_test_data_path_start + "*.wav"):
     print(f"File: {f}")
 print("+--------------+")
 

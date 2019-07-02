@@ -79,6 +79,7 @@ def create_graphs(history, name=''):
 def parse_args():
     args_dict = None
     try:
+        print(f"argv={sys.argv}")
         input_dict_file = sys.argv[1]
         with open(input_dict_file, 'r') as f:
             # expects a file with a dictionary
