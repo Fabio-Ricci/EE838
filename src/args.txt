@@ -1,8 +1,18 @@
 {
     'load_model': True,
-    'load_model_path': '/content/gdrive/Shared drives/EE838/models/',
+    'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
     'load_model_path_version': 'v27/',
+
+    'preprocess_batch_size': 30,
+    
     'initial_epoch': 2265,
-    'batch_size': 30,
-    'num_epochs': 100
+    'num_epochs': 100,
+    'learning_rate': 0.0001,
+    'gradient_batch_size': 64,
+    'validation_split': 0.15,
+    
+    'layer_size_io': 12348,
+    'layer_size_hidden_large': 8400,
+    'layer_size_hidden_small': 5000,
+    'layer_size_code': 4000,
 }
