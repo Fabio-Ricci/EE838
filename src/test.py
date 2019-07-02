@@ -42,7 +42,7 @@ autoencoder = load_model(full_path, lr=params.learning_rate)
 file_arr = iglob(params.wav_test_data_path_start + "*.wav")
 
 print("+--------------+")
-print(f"Params: {params}")
+print(f"wav_test_data_path_start: {.wav_test_data_path_start}")
 print("+--------------+")
 for f in iglob(params.wav_test_data_path_start + "*.wav"):
     print(f"File: {f}")
