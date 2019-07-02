@@ -64,9 +64,9 @@ for f in file_arr:
     a0 = normalize(a0)
     a1 = normalize(a1)
 
-    if params.overlap:
-        s_a0 = segment(a0, params.overlap_size, section_size)
-        s_a1 = segment(a1, params.overlap_size, section_size)
+    if params.overlap_sections:
+        s_a0 = segment(a0, params.overlap_section_size, section_size)
+        s_a1 = segment(a1, params.overlap_section_size, section_size)
     else:
         s_a0 = [a0[i * section_size:(i + 1) * section_size] for i in range((len(a0) + section_size - 1) // section_size)]
         s_a1 = [a1[i * section_size:(i + 1) * section_size] for i in range((len(a1) + section_size - 1) // section_size)] 
@@ -118,11 +118,11 @@ for f in file_arr:
         ch1_song = np.concatenate((ch1_song, channel1))
         ch2_song = np.concatenate((ch2_song, channel2))
     
-    if params.overlap:
+    if params.overlap_sections:
         ch1_song = [ch1_song[i : i+section_size] for i in range(0, len(ch1_song), section_size)] # [...] -> [[..], [..], ...]
         ch2_song = [ch2_song[i : i+section_size] for i in range(0, len(ch2_song), section_size)]
-        ch1_song = add_overlap(ch1_song, overlap_size) # [[..], [..], ...] -> [...]
-        ch2_song = add_overlap(ch2_song, overlap_size)
+        ch1_song = add_overlap(ch1_song, params.overlap_section_size) # [[..], [..], ...] -> [...]
+        ch2_song = add_overlap(ch2_song, params.overlap_section_size)
 
     # maps sigmoid [0,1] output to [-1,1] for .wav
     ch1_song = ((ch1_song * 2) - 1)
