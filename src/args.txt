@@ -1,4 +1,7 @@
 {
+    'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
+    'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
+    
     'load_model': True,
     'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
     'load_model_path_version': 'v27/',
@@ -11,8 +14,8 @@
     'gradient_batch_size': 64,
     'validation_split': 0.15,
     
-    'layer_size_io': 12348,
-    'layer_size_hidden_large': 8400,
-    'layer_size_hidden_small': 5000,
-    'layer_size_code': 4000,
+    'layer_dim_io': 12348,
+    'layer_dim_hidden_large': 8400,
+    'layer_dim_hidden_small': 5000,
+    'layer_dim_code': 4000
 }

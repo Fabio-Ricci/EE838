@@ -23,13 +23,13 @@ def compile_model(model, lr=0.0001):
     return model
 
 
-def load_model(name):
+def load_model(name, lr):
     with open(f"{name}.json", 'r') as json_file:
         loaded_model = model_from_json(json_file.read())
 
     # load weights into new model
     loaded_model.load_weights(f"{name}.h5")
-    loaded_model = compile_model(loaded_model)
+    loaded_model = compile_model(loaded_model, lr)
 
     return loaded_model
 
@@ -77,7 +77,7 @@ def create_graphs(history, name=''):
 
 
 def parse_args():
-    args_dict = {}
+    args_dict = None
     try:
         input_dict_file = sys.argv[1]
         with open(input_dict_file, 'r') as f:
@@ -88,27 +88,69 @@ def parse_args():
     return args_dict
 
 
+class Params():
+    def __init__(self, dictionary):
+        for key in dictionary:
+            setattr(self, key, dictionary[key])
+
+    def __repr__(self):
+        attrs = str([attr for attr in self.__dict__])
+        return "<Params: %s>" % attrs
+
+
+def default_args_dict():
+    return {
+        'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
+        'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
+    
+        'load_model': True,
+        'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
+        'load_model_path_version': 'v27/',
+
+        'preprocess_batch_size': 30,
+        
+        'initial_epoch': 2265,
+        'num_epochs': 100,
+        'learning_rate': 0.0001,
+        'gradient_batch_size': 64,
+        'validation_split': 0.15,
+        
+        'layer_dim_io': 12348,
+        'layer_dim_hidden_large': 8400,
+        'layer_dim_hidden_small': 5000,
+        'layer_dim_code': 4000
+    }
+
+
 if __name__ == "__main__":
     args_dict = parse_args()
+    if args_dict == None:
+        # define the default parameters to be used
+        args_dict = default_args_dict()
     
-    load = True
-    if load:
-        full_path = '/content/gdrive/Shared drives/EE838/models/v27/model-2265eps'
-        autoencoder = load_model(full_path)
+    params = Params(args_dict)
+    
+    if params.load_model:
+        full_path = params.load_model_path_start
+        full_path += params.load_model_path_version
+        full_path += f"model-{params.initial_epoch}eps"
+
+        autoencoder = load_model(full_path, lr=params.learning_rate)
         print(f"Model loaded succesfully from \'{full_path}\'")
+
     else:
-        input_img = Input(shape=(12348,))
-        encoded = Dense(8400, activation='relu')(input_img)
-        encoded = Dense(5000, activation='relu')(encoded)
+        input_img = Input(shape=(params.layer_dim_io,))
+        encoded = Dense(params.layer_dim_hidden_large, activation='relu')(input_img)
+        encoded = Dense(params.layer_dim_hidden_small, activation='relu')(encoded)
 
-        encoded = Dense(4000, activation='relu')(encoded)
+        encoded = Dense(params.layer_dim_code, activation='relu')(encoded)
 
-        decoded = Dense(5000, activation='relu')(encoded)
-        decoded = Dense(8400, activation='relu')(decoded)
-        decoded = Dense(12348, activation='sigmoid')(decoded)
+        decoded = Dense(params.layer_dim_hidden_small, activation='relu')(encoded)
+        decoded = Dense(params.layer_dim_hidden_large, activation='relu')(decoded)
+        decoded = Dense(params.layer_dim_io, activation='sigmoid')(decoded)
 
         autoencoder = Model(input_img, decoded)
-        autoencoder = compile_model(autoencoder)
+        autoencoder = compile_model(autoencoder, lr=params.learning_rate)
 
     # checkpoint
     # filepath="weights-improvement-{epoch:02d}.hdf5"
@@ -116,12 +158,10 @@ if __name__ == "__main__":
     callbacks_list = []  # [checkpoint]
     scores = []
 
-    num_epochs = 100
-    initial_epoch = 2265
-    for i in range(30000):  # 100 epochs = 0.56h = 34 min
+    for i in range(30000):
         gc.collect()
 
-        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(30)
+        wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(params.preprocess_batch_size)
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
 
@@ -129,20 +169,20 @@ if __name__ == "__main__":
         del(wav_arr_ch1, wav_arr_ch2)
 
         # fit the model
-        epochs = (i+1) * num_epochs + initial_epoch
+        epochs = (i+1) * params.num_epochs + params.initial_epoch
         history = autoencoder.fit(data, data,
                                   epochs=epochs,
                                   shuffle=True,
                                   callbacks=callbacks_list,
-                                  batch_size=64,
-                                  validation_split=0.15,
-                                  initial_epoch=epochs - num_epochs)
+                                  batch_size=params.gradient_batch_size,
+                                  validation_split=params.validation_split,
+                                  initial_epoch=epochs - params.num_epochs)
 
         score = autoencoder.evaluate(data, data, verbose=0)
         scores.append(score)
         print(f"Test loss: {score}")
 
         # NOTE v27 uses overlapping segments
-        name = f"/v27/model-{epochs}eps"
-        save_model(autoencoder, f"/content/gdrive/Shared drives/EE838/models{name}")
-        create_graphs(history, f"/content/gdrive/Shared drives/EE838/graphs{name}")
+        save_name = params.load_model_path_version + f"model-{epochs}eps"
+        save_model(autoencoder, params.save_model_path_start + save_name)
+        create_graphs(history, params.save_graph_path_start + save_name)
