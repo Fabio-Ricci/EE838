@@ -1,51 +1,60 @@
-import matplotlib.pyplot as plt
-import datetime
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.layers import Input, Dense
-import tensorflow as tf
-import numpy as np
-from preprocces import preprocess_data
 import os
-import matplotlib.pyplot as plt
 import gc
+import datetime
+
+import tensorflow as tf
+from tf.keras.models import Model, model_from_json
+from tf.keras.layers import Input, Dense
+from tf.keras.callbacks import ModelCheckpoint
+from tf.keras.optimizers import Adam
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from preprocces import preprocess_data
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def compile_model(model):
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss='mse')
+    model.compile(optimizer=Adam(lr=0.0001), loss='mse')
     return model
 
 
 def load_model(name):
-    # load json and create model
-    json_file = open(name + '.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = model_from_json(loaded_model_json)
+    with open(f"{name}.json", 'r') as json_file:
+        loaded_model = model_from_json(json_file.read())
+
     # load weights into new model
-    loaded_model.load_weights(name + ".h5")
+    loaded_model.load_weights(f"{name}.h5")
     loaded_model = compile_model(loaded_model)
+
     return loaded_model
 
 
 def save_model(model, name):
     # serialize model to JSON
     model_json = model.to_json()
-    if os.path.isfile(name+'.json'):
-        name = name+'-'+str(datetime.datetime.now())
-    if not os.path.exists('/'.join(name.split('/')[:-1])):
-        os.makedirs('/'.join(name.split('/')[:-1]))
-    with open(name + ".json", "w") as json_file:
+
+    if os.path.isfile(f"{name}.json"):
+        name = f"{name}-{datetime.datetime.now()}"
+
+    path = '/'.join(name.split('/')[:-1])
+    if not os.path.exists(path):
+        os.makedirs(path)
+    
+    with open(f"{name}.json", 'w') as json_file:
         json_file.write(model_json)
+
     # serialize weights to HDF5
-    model.save_weights(name + ".h5")
+    model.save_weights(f"{name}.h5")
 
 
-# http://flothesof.github.io/convnet-face-keypoint-detection.html
-def create_graphs(history, name=''):
-    # loss
+def create_graphs(history, name='', plot_acc=False):
+    '''
+    ref.: http://flothesof.github.io/convnet-face-keypoint-detection.html#Towards-more-complicated-models
+    '''
+    # summarize history for loss
     plt.figure()
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -53,13 +62,28 @@ def create_graphs(history, name=''):
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    # plt.show()
     plt.tight_layout()
+
+    curr_time = datetime.datetime.now()
     if name == '':
-        name = 'graphs/'+str(datetime.datetime.now())
-    if not os.path.exists('/'.join(name.split('/')[:-1])):
-        os.makedirs('/'.join(name.split('/')[:-1]))
-    plt.savefig(name+'-training-info.png')
+        name = f"graphs/{curr_time}"
+    
+    path = '/'.join(name.split('/')[:-1])
+    if not os.path.exists(path):
+        os.makedirs(path)
+    plt.savefig(f"{name}-training-info.png")
+
+    if plot_acc:
+        # summarize history for accuracy
+        plt.figure()
+        plt.plot(history.history['acc'])
+        plt.plot(history.history['val_acc'])
+        plt.title('model accuracy')
+        plt.ylabel('accuracy')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'test'], loc='upper left')
+        plt.tight_layout()
+        plt.savefig(f"{name}-training-info-acc.png")
 
 
 if __name__ == "__main__":
