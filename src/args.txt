@@ -1,7 +1,12 @@
 {
+    'section_size': 6174,
+    'overlap_sections': True,
+    'overlap_section_size': 1029,
+    'wav_data_path_start': '/content/gdrive/Shared drives/EE838/songs_wav/',
+
     'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
     'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
-    
+
     'load_model': True,
     'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
     'load_model_path_version': 'v27/',
