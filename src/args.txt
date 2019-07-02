@@ -2,8 +2,10 @@
     'section_size': 6174,
     'overlap_sections': True,
     'overlap_section_size': 1029,
-    'wav_data_path_start': '/content/gdrive/Shared drives/EE838/songs_wav/',
+    'wav_train_data_path_start': '/content/gdrive/Shared drives/EE838/songs_wav/',
+    'wav_test_data_path_start': '/content/gdrive/Shared drives/EE838/test/',
 
+    'save_test_output_path_start': '/content/gdrive/Shared drives/EE838/test_reconstructed/',
     'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
     'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
 

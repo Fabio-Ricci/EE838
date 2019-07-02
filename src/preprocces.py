@@ -41,7 +41,7 @@ def add_overlap(segmented, overlap_size, add_type=-1):
 
 def preprocess_data(batch_size, wav_data_path_start=DATA_FILES_WAV, section_size=12348//2, 
                     overlap=False, overlap_size=1029):
-    file_arr = list(iglob(wav_data_path_start + '*.wav'))
+    file_arr = list(iglob(wav_data_path_start + "*.wav"))
     np.random.shuffle(file_arr)
     
     sess = tf.Session()

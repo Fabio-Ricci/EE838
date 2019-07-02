@@ -103,8 +103,10 @@ def default_args_dict():
         'section_size': 6174,
         'overlap_sections': True,
         'overlap_section_size': 1029,
-        'wav_data_path_start': '/content/gdrive/Shared drives/EE838/songs_wav/',
+        'wav_train_data_path_start': '/content/gdrive/Shared drives/EE838/songs_wav/',
+        'wav_test_data_path_start': '/content/gdrive/Shared drives/EE838/test/',
 
+        'save_test_output_path_start': '/content/gdrive/Shared drives/EE838/test_reconstructed/',
         'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
         'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
     
@@ -168,7 +170,7 @@ if __name__ == "__main__":
 
         wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(
             params.preprocess_batch_size, 
-            wav_data_path_start=params.wav_data_path_start)
+            wav_data_path_start=params.wav_train_data_path_start)
 
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
