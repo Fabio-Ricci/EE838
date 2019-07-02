@@ -1,0 +1,8 @@
+{
+    'load_model': True,
+    'load_model_path': '/content/gdrive/Shared drives/EE838/models/',
+    'load_model_path_version': 'v27/',
+    'initial_epoch': 2265,
+    'batch_size': 30,
+    'num_epochs': 100
+}

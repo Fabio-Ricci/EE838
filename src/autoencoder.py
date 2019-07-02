@@ -1,5 +1,7 @@
 import os
 import gc
+import sys
+import ast
 import datetime
 
 import tensorflow as tf
@@ -50,7 +52,7 @@ def save_model(model, name):
     model.save_weights(f"{name}.h5")
 
 
-def create_graphs(history, name='', plot_acc=False):
+def create_graphs(history, name=''):
     '''
     ref.: http://flothesof.github.io/convnet-face-keypoint-detection.html#Towards-more-complicated-models
     '''
@@ -73,21 +75,21 @@ def create_graphs(history, name='', plot_acc=False):
         os.makedirs(path)
     plt.savefig(f"{name}-training-info.png")
 
-    if plot_acc:
-        # summarize history for accuracy
-        plt.figure()
-        plt.plot(history.history['acc'])
-        plt.plot(history.history['val_acc'])
-        plt.title('model accuracy')
-        plt.ylabel('accuracy')
-        plt.xlabel('epoch')
-        plt.legend(['train', 'test'], loc='upper left')
-        plt.tight_layout()
-        plt.savefig(f"{name}-training-info-acc.png")
+
+def parse_args():
+    args_dict = {}
+    try:
+        input_dict_file = sys.argv[1]
+        with open(input_dict_file, 'r') as f:
+            # expects a file with a dictionary
+            args_dict = ast.literal_eval(f.read())
+    except:
+        pass
+    return args_dict
 
 
 if __name__ == "__main__":
-
+    args_dict = parse_args()
     # inputs = 12348
     # hidden_1_size = 8400
     # hidden_2_size = 3440
