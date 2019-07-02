@@ -15,9 +15,9 @@ import time
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
-autoencoder = load_model('/content/gdrive/Team Drives/EE838/models/v27/model-2165eps')
+autoencoder = load_model('/content/gdrive/Shared drives/EE838/models/v27/model-1650eps')
 
-file_arr = iglob('/content/gdrive/Team Drives/EE838/test/*.wav')
+file_arr = iglob('/content/gdrive/Shared drives/EE838/test/*.wav')
 sess = tf.Session()
 
 section_size = 12348 // 2
@@ -46,7 +46,7 @@ for f in file_arr:
     a0 = normalize(a0)
     a1 = normalize(a1)
 
-    overlap_size = 98 # ~1.6% of section_size
+    overlap_size = 1029 # ~1.6% of section_size
     if OVERLAP_SEGMENTS:
         s_a0 = segment(a0, overlap_size, section_size)
         s_a1 = segment(a1, overlap_size, section_size)
@@ -107,7 +107,7 @@ for f in file_arr:
         ch1_song = [ch1_song[i : i+section_size] for i in range(0, len(ch1_song), section_size)] # [...] -> [[..], [..], ...]
         ch2_song = [ch2_song[i : i+section_size] for i in range(0, len(ch2_song), section_size)]
         ch1_song = add_overlap(ch1_song, overlap_size) # [[..], [..], ...] -> [...]
-        ch2_song = add_overlap(ch1_song, overlap_size)
+        ch2_song = add_overlap(ch2_song, overlap_size)
 
     # maps sigmoid [0,1] output to [-1,1] for .wav
     ch1_song = ((ch1_song * 2)-1)
@@ -122,7 +122,7 @@ for f in file_arr:
         audio_arr, file_format='wav', samples_per_second=sample_rate)
 
     wav_file = sess.run(wav_encoder)
-    f = open('/content/gdrive/Team Drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb')
+    f = open('/content/gdrive/Shared drives/EE838/test_reconstructed/' + str(file_number) + ".wav", 'wb')
     f.write(wav_file)
     f.close()
     file_number += 1

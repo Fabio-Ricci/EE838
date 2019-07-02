@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     if load:
         autoencoder = load_model(
-            '/content/gdrive/Team Drives/EE838/models/v27/model-2165eps')
+            '/content/gdrive/Shared drives/EE838/models/v27/model-2265eps')
         print("model loaded succesfully")
     else:
         input_img = Input(shape=(12348,))
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         data = np.concatenate((wav_arr_ch1, wav_arr_ch2), axis=1)
         del(wav_arr_ch1, wav_arr_ch2)
 
-        initial_epoch = 2165
+        initial_epoch = 2265
         num_epochs = 100
         epochs = (i+1)*num_epochs + initial_epoch
         # Fit the model
@@ -127,5 +127,5 @@ if __name__ == "__main__":
         print('Test loss:', score)
 
         name = '/v27/model-'+str(epochs)+'eps' # NOTE v27 uses overlapping segments
-        save_model(autoencoder, '/content/gdrive/Team Drives/EE838/models'+name)
-        create_graphs(history, '/content/gdrive/Team Drives/EE838/graphs'+name)
+        save_model(autoencoder, '/content/gdrive/Shared drives/EE838/models'+name)
+        create_graphs(history, '/content/gdrive/Shared drives/EE838/graphs'+name)

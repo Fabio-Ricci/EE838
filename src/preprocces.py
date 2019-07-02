@@ -11,7 +11,7 @@ import random
 from functools import reduce
 
 
-DATA_FILES_WAV = '/content/gdrive/Team Drives/EE838/songs_wav'
+DATA_FILES_WAV = '/content/gdrive/Shared drives/EE838/songs_wav'
 SECTION_SIZE = 12348 // 2
 OVERLAP_SEGMENTS = True
 
@@ -77,7 +77,7 @@ def preprocess_data(batch_size):
         a0 = normalize(a0)
         a1 = normalize(a1)
 
-        overlap_size = 98 # ~1.6% of section_size
+        overlap_size = 1029 # ~1.6% of section_size
 
         if OVERLAP_SEGMENTS:
             s_a0 = segment(a0, overlap_size, section_size)
