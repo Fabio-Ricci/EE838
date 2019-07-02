@@ -5,10 +5,10 @@ import ast
 import datetime
 
 import tensorflow as tf
-from tf.keras.models import Model, model_from_json
-from tf.keras.layers import Input, Dense
-from tf.keras.callbacks import ModelCheckpoint
-from tf.keras.optimizers import Adam
+from tensorflow.keras.models import Model, model_from_json
+from tensorflow.keras.layers import Input, Dense
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.optimizers import Adam
 
 import numpy as np
 import matplotlib.pyplot as plt

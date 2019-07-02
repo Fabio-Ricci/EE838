@@ -5,9 +5,9 @@ import math
 from glob import iglob
 
 import tensorflow as tf
-from tf.keras.models import model_from_json
-from tf.contrib import ffmpeg
-from tf.contrib.framework.python.ops.audio_ops import decode_wav, encode_wav
+from tensorflow.keras.models import model_from_json
+from tensorflow.contrib import ffmpeg
+from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav, encode_wav
 
 from scipy.fftpack import rfft, irfft
 

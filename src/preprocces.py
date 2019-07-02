@@ -4,7 +4,7 @@ from glob import iglob
 from functools import reduce
 
 import tensorflow as tf
-from tf.contrib.framework.python.ops.audio_ops import decode_wav
+from tensorflow.contrib.framework.python.ops.audio_ops import decode_wav
 
 from scipy.fftpack import rfft, irfft
 from sklearn.preprocessing import MinMaxScaler
