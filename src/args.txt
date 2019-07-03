@@ -1,0 +1,28 @@
+{
+    'section_size': 6174,
+    'overlap_sections': True,
+    'overlap_section_size': 1029,
+    'wav_train_data_path_start': '/content/gdrive/Shared drives/EE838/songs_wav/',
+    'wav_test_data_path_start': '/content/gdrive/Shared drives/EE838/test/',
+
+    'save_test_output_path_start': '/content/gdrive/Shared drives/EE838/test_reconstructed/',
+    'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
+    'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
+
+    'load_model': True,
+    'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
+    'load_model_path_version': 'v27/',
+
+    'preprocess_batch_size': 30,
+    
+    'initial_epoch': 2265,
+    'num_epochs': 100,
+    'learning_rate': 0.0001,
+    'gradient_batch_size': 64,
+    'validation_split': 0.15,
+    
+    'layer_dim_io': 12348,
+    'layer_dim_hidden_large': 8400,
+    'layer_dim_hidden_small': 5000,
+    'layer_dim_code': 4000
+}
