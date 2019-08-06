@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 '''
 def segment_t(sequence, seg_size):
     assert(seg_size % 2 == 0) # TODO treat odd cases
-    return [sequence[d : d + seg_size] for d in range(0, len(sequence) - seg_size + 1, seg_size / 2)]
+    return [sequence[d : d + seg_size] for d in range(0, len(sequence) - seg_size + 1, seg_size // 2)]
 
 '''
     adds a segmented wave modulated by a triangular function
