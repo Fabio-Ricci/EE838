@@ -26,14 +26,14 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 args_dict = parse_args()
 if args_dict == None:
     # define the default parameters to be used
-    print("no args_dict passed.. using default values")
+    print("[warning] no args_dict passed.. using default values")
     args_dict = default_args_dict()
 
 params = Params(args_dict)
 
 
 
-
+# loads the trained model to test it
 full_path = params.load_model_path_start
 full_path += params.load_model_path_version
 full_path += f"model-{params.initial_epoch}eps"

@@ -9,13 +9,13 @@
     'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
     'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
 
-    'load_model': False,
+    'load_model': True,
     'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
-    'load_model_path_version': 'v28/',
+    'load_model_path_version': 'v27/',
 
-    'preprocess_batch_size': 30,
+    'preprocess_batch_size': 25,
     
-    'initial_epoch': 0,
+    'initial_epoch': 2265,
     'num_epochs': 100,
     'learning_rate': 0.0001,
     'gradient_batch_size': 64,

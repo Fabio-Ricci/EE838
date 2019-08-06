@@ -13,8 +13,7 @@ from tensorflow.keras.optimizers import Adam
 import numpy as np
 import matplotlib.pyplot as plt
 
-# from preprocess import preprocess_data
-from preprocess_experimental import preprocess_data
+from preprocess import preprocess_data
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
