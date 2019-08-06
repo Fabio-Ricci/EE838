@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # from preprocces import preprocess_data
-from preprocces_experimental import preprocess_data
+from preproccess_experimental import preprocess_data
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
