@@ -26,11 +26,10 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 args_dict = parse_args()
 if args_dict == None:
     # define the default parameters to be used
+    print("no args_dict passed.. using default values")
     args_dict = default_args_dict()
 
 params = Params(args_dict)
-params.initial_epoch = 1650
-print("[warning] overwriting: initial_epoch=1650")
 
 
 

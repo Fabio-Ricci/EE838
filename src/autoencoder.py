@@ -111,14 +111,14 @@ def default_args_dict():
         'save_test_output_path_start': '/content/gdrive/Shared drives/EE838/test_reconstructed/',
         'save_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
         'save_graph_path_start': '/content/gdrive/Shared drives/EE838/graphs/',
-    
-        'load_model': True,
+
+        'load_model': False,
         'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
-        'load_model_path_version': 'v27/',
+        'load_model_path_version': 'v28/',
 
         'preprocess_batch_size': 30,
         
-        'initial_epoch': 2265,
+        'initial_epoch': 0,
         'num_epochs': 100,
         'learning_rate': 0.0001,
         'gradient_batch_size': 64,
