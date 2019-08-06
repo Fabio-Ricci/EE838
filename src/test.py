@@ -15,8 +15,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from autoencoder import compile_model, load_model, parse_args, Params, default_args_dict
-# from preprocces import normalize, segment, add_overlap
-from preprocces_experimental import normalize, segment_t, add_overlap_t
+# from preprocess import normalize, segment, add_overlap
+from preprocess_experimental import normalize, segment_t, add_overlap_t
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
