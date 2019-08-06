@@ -11,7 +11,7 @@
 
     'load_model': True,
     'load_model_path_start': '/content/gdrive/Shared drives/EE838/models/',
-    'load_model_path_version': 'v27/',
+    'load_model_path_version': 'v28/',
 
     'preprocess_batch_size': 30,
     
