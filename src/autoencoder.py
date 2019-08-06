@@ -13,7 +13,8 @@ from tensorflow.keras.optimizers import Adam
 import numpy as np
 import matplotlib.pyplot as plt
 
-from preprocces import preprocess_data
+# from preprocces import preprocess_data
+from preprocces_experimental import preprocess_data
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -171,7 +172,8 @@ if __name__ == "__main__":
 
         wav_arr_ch1, wav_arr_ch2, sample_rate = preprocess_data(
             params.preprocess_batch_size, 
-            wav_data_path_start=params.wav_train_data_path_start)
+            wav_data_path_start=params.wav_train_data_path_start,
+            overlap=params.overlap_sections) # TODO test if overlapping leads to better results
 
         wav_arr_ch1 = np.array(wav_arr_ch1)
         wav_arr_ch2 = np.array(wav_arr_ch2)
