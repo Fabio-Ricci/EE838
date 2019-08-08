@@ -28,7 +28,9 @@ def trianglify(segment, up=True, down=True, mult_first_by_zero=False):
 def modulate_and_add(segmented, seg_size, original_len):
     '''Expects a list of overlapping segments (with half length overlap size) and 
        modulates and adds them to reconstruct the original sequence.'''
-    assert(len(segmented[0]) == seg_size) # assert(all(len(segmented[i]) == seg_size for i in range(0, len(segmented))))
+    #assert(all(len(segmented[i]) == seg_size for i in range(0, len(segmented))))
+    
+    overlap_size = seg_size // 2
 
     # modulating 'segmented' by a triangular pulse
     modulated = [trianglify(segment, up=i > 0, down=i < len(segmented) - 1) 
