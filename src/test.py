@@ -129,8 +129,8 @@ for f in file_arr:
     if params.overlap_sections:
         ch1_song = [ch1_song[i : i+section_size] for i in range(0, len(ch1_song), section_size)] # [...] -> [[..], [..], ...]
         ch2_song = [ch2_song[i : i+section_size] for i in range(0, len(ch2_song), section_size)]
-        ch1_song = modulate_and_add(ch1_song, section_size) # [[..], [..], ...] -> [...]
-        ch2_song = modulate_and_add(ch2_song, section_size)
+        ch1_song = modulate_and_add(ch1_song, section_size, original_len=len(a0)) # [[..], [..], ...] -> [...]
+        ch2_song = modulate_and_add(ch2_song, section_size, original_len=len(a1))
 
     # maps sigmoid [0,1] output to [-1,1] for .wav
     ch1_song = ((ch1_song * 2) - 1)
