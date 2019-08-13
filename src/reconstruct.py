@@ -7,7 +7,7 @@ def segmented_with_half_lenght_overlap(sequence, seg_size):
     overlap_size = seg_size // 2
     return [sequence[i : i + seg_size] for i in range(0, len(sequence) - seg_size + 1, overlap_size)]
 
-def trianglify(segment, up=True, down=True, mult_first_by_zero=False):
+def trianglify(segment, up=True, down=True, mult_first_by_zero=True):
     '''Multiplies the given segment by a triangular pulse.'''
     assert(len(segment) % 2 == 0)
 
